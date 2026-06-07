@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Icons</title>
+</head>
+<body>
+    <h1>Test de Iconos</h1>
+    <div id="output"></div>
+    
+    <script src="/static/frontend/js/config.js?v=20260208"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const output = document.getElementById('output');
+            
+            // Test icon function
+            output.innerHTML += '<p>' + icon('success') + ' Success Icon</p>';
+            output.innerHTML += '<p>' + icon('error') + ' Error Icon</p>';
+            output.innerHTML += '<p>' + icon('pill') + ' Pill Icon</p>';
+            output.innerHTML += '<p>' + icon('dna') + ' DNA Icon</p>';
+            output.innerHTML += '<p>' + withIcon('config', 'Configuration message') + '</p>';
+            
+            console.log('Icons test loaded');
+        });
+    </script>
+</body>
+</html>
