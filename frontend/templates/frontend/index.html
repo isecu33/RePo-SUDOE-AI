@@ -1,0 +1,395 @@
+<!-- File location: RePo-SUDOE-AI/frontend/templates/frontend/index.html -->
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RePo-SUDOE-AI</title>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="language" content="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}">
+    <link rel="stylesheet" href="{% static 'frontend/dist/main.css' %}">
+</head>
+<body>
+    <div id="app-container">
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                RePo-SUDOE-AI
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#chat" data-section="chat" class="nav-link active">{% trans "Chat" %}</a></li>
+                    <li><a href="#manual" data-section="manual" class="nav-link">{% trans "Manual Mode" %}</a></li>
+                    <li><a href="#output" data-section="output" class="nav-link">{% trans "Output" %}</a></li>
+                </ul>
+            </nav>
+            <div class="user-menu">
+                <button class="theme-toggle"><img src="{% static 'frontend/img/theme-mode.png' %}" alt="{% trans 'Toggle Theme' %}" class="theme-icon"></button>
+                <button class="language-toggle" id="language-toggle">EN</button>
+                <span><img src="{% static 'frontend/img/user.png' %}" alt="{% trans 'User' %}" class="user-icon"> {{ user.get_full_name|default:user.username }}</span>
+                <a href="{% url 'accounts:logout' %}" class="logout-btn">{% trans "Logout" %}</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Chat Section -->
+        <section id="chat" class="section chat-section active">
+            
+            <div class="chat-main">
+                <div class="chat-messages" id="chat-messages" >
+                    <!-- Messages will appear here -->
+                </div>
+                
+                <div class="welcome-area" id="welcome-area">
+                    <img src="{% static 'frontend/img/pure-logo-repo-sudoe-ai-nobackground.png' %}" alt="RePo-SUDOE-AI" class="welcome-icon">
+                    <h2 class="welcome-title">{% trans "RePo-SUDOE-AI Molecular Docking Explorer" %}</h2>
+                    <p class="welcome-subtitle">
+                        {% trans "Discover the fascinating world of molecular docking through AI-powered simulations using RePo-SUDOE-AI. Ask questions, explore drug-target interactions, and visualize molecular structures in 3D." %}
+                    </p>
+                    <div class="welcome-subtitle" style="margin-bottom: 0.5rem;">{% trans "Try asking:" %}</div>
+
+                    <ul class="suggestion-list">
+                        <li class="suggestion-item">{% trans "Perform docking between Abemaciclib drug and A2M protein" %}</li>
+                        <li class="suggestion-item">{% trans "Give me information about the LZTS1 gene" %}</li>
+                        <li class="suggestion-item">{% trans "Which genes in the database are related to tumor development?" %}</li>
+                    </ul>
+                </div>
+
+                <div class="chat-input-area">
+                    <div class="input-group">
+                        <textarea class="chat-input" placeholder="{% trans 'Type your message here...' %}" id="chat-input" spellcheck="false"></textarea>
+                        <button class="send-button" id="send-button">➤</button>
+                    </div>
+                    <div class="loading-indicator" id="loading-indicator" style="display: none;">
+                        <div class="spinner"></div>
+                        {% trans "Processing your request with RePo-SUDOE-AI..." %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manual Parameter Section -->
+        <section id="manual" class="section manual-section">
+            <div class="section-content">
+                
+                <div class="upload-grid">
+                    <div class="upload-card" data-upload="receptor">
+                        <div class="upload-title">{% trans "Receptor" %} *</div>
+                        <div class="upload-icon"><img src="{% static 'frontend/img/cloud-computing.png' %}" alt="{% trans 'Upload' %}"></div>
+                        <div class="upload-text">{% trans "Choose a file or drop it here..." %}</div>
+                        <div class="upload-formats">
+                            {% trans "Formats:: PDBQT (best), PDB, ENT, XYZ, PQR, MCIF, MMCIF" %}
+                        </div>
+                        <input type="file" class="file-input" id="receptor-file" accept=".pdbqt,.pdb,.ent,.xyz,.pqr,.mcif,.mmcif">
+                    </div>
+
+                    <div class="upload-card" data-upload="drug">
+                        <div class="upload-title">{% trans "Drug" %} *</div>
+                        <div class="upload-icon"><img src="{% static 'frontend/img/cloud-computing.png' %}" alt="{% trans 'Upload' %}"></div>
+                        <div class="upload-text">{% trans "Choose a file or drop it here..." %}</div>
+                        <div class="upload-formats">
+                            {% trans "Formats:: PDBQT (best), CAN, MDL, MOL, MOL2, PDB, SD, SDF, SMI, SMILES, XYZ" %}
+                        </div>
+                        <input type="file" class="file-input" id="drug-file" accept=".pdbqt,.can,.mdl,.mol,.mol2,.pdb,.sd,.sdf,.smi,.smiles,.xyz">
+                    </div>
+
+                    <div class="upload-card" data-upload="pose">
+                        <div class="upload-title">{% trans "Correct Pose (optional)" %}</div>
+                        <div class="upload-icon"><img src="{% static 'frontend/img/cloud-computing.png' %}" alt="{% trans 'Upload' %}"></div>
+                        <div class="upload-text">{% trans "Choose a file or drop it here..." %}</div>
+                        <div class="upload-formats">
+                            {% trans "Formats:: PDBQT or PDB" %}
+                        </div>
+                        <input type="file" class="file-input" id="pose-file" accept=".pdbqt,.pdb">
+                    </div>
+                </div>
+                
+                <!-- Unified Preview Section -->
+                <div class="unified-preview-section">
+                    <div class="preview-card unified-preview">
+                        <div class="preview-header">
+                            <div class="file-list-container">
+                                <div class="file-item">
+                                    <span class="preview-filename" id="receptor-filename" style="display: none; font-size: 0.9rem; margin-right: 1rem;">
+                                        <span class="file-type-label" style="color: var(--accent-color); font-weight: 600;">{% trans "Receptor" %}:</span>
+                                        <span class="filename-text"></span>
+                                    </span>
+                                    <button class="change-file-btn" id="change-receptor" style="display: none; background: var(--blue-color); color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer; margin-left: 0.5rem;">{% trans "Change" %}</button>
+                                </div>
+                                <div class="file-item">
+                                    <span class="preview-filename" id="drug-filename" style="display: none; font-size: 0.9rem; margin-right: 1rem;">
+                                        <span class="file-type-label" style="color: var(--success-color); font-weight: 600;">{% trans "Drug" %}:</span>
+                                        <span class="filename-text"></span>
+                                    </span>
+                                    <button class="change-file-btn" id="change-drug" style="display: none; background: var(--blue-color); color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer; margin-left: 0.5rem;">{% trans "Change" %}</button>
+                                </div>
+                                <div class="file-item">
+                                    <span class="preview-filename" id="pose-filename" style="display: none; font-size: 0.9rem; margin-right: 1rem;">
+                                        <span class="file-type-label" style="color: var(--warning-color); font-weight: 600;">{% trans "Pose" %}:</span>
+                                        <span class="filename-text"></span>
+                                    </span>
+                                    <button class="change-file-btn" id="change-pose" style="display: none; background: var(--blue-color); color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer; margin-left: 0.5rem;">{% trans "Change" %}</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="preview-content" id="preview">
+                            <div class="viewer_3Dmoljs" id="manual-viewer" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Docking Box Configuration -->
+                <div class="box-config-section" id="box-config-section" style="margin-top: 2rem; height: fit-content;">
+                    <div class="config-card">
+                        <div class="config-header">
+                            <h3>{% trans "Docking Box Parameters" %}</h3>
+                        </div>
+
+                        <div class="config-content">
+                            <!-- Box coordinates in a single row -->
+                            <div class="config-row" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem;">
+                                <div class="config-group">
+                                    <label for="box-center-x" class="config-label">{% trans "Center X (Å):" %}</label>
+                                    <input type="number" id="box-center-x" placeholder="0.0" step="0.1" class="config-input">
+                                </div>
+                                <div class="config-group">
+                                    <label for="box-center-y" class="config-label">{% trans "Center Y (Å):" %}</label>
+                                    <input type="number" id="box-center-y" placeholder="0.0" step="0.1" class="config-input">
+                                </div>
+                                <div class="config-group">
+                                    <label for="box-center-z" class="config-label">{% trans "Center Z (Å):" %}</label>
+                                    <input type="number" id="box-center-z" placeholder="0.0" step="0.1" class="config-input">
+                                </div>
+                            </div>
+
+                            <!-- Box size in a single row -->
+                            <div class="config-row" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                                <div class="config-group">
+                                    <label for="box-size-x" class="config-label">{% trans "Size X (Å):" %}</label>
+                                    <input type="number" id="box-size-x" placeholder="20.0" min="5" step="0.5" class="config-input">
+                                </div>
+                                <div class="config-group">
+                                    <label for="box-size-y" class="config-label">{% trans "Size Y (Å):" %}</label>
+                                    <input type="number" id="box-size-y" placeholder="20.0" min="5" step="0.5" class="config-input">
+                                </div>
+                                <div class="config-group">
+                                    <label for="box-size-z" class="config-label">{% trans "Size Z (Å):" %}</label>
+                                    <input type="number" id="box-size-z" placeholder="20.0" min="5" step="0.5" class="config-input">
+                                </div>
+                            </div>
+
+                            <!-- Checkbox and buttons in the same row -->
+                            <div class="config-row" style="display: grid; grid-template-columns: 1fr auto auto; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                                <div>
+                                    <label for="enable-custom-box" class="config-label">
+                                        <input type="checkbox" id="enable-custom-box">
+                                        {% trans "Use Custom Box Parameters" %}
+                                    </label>
+                                    <small class="config-help" style="display: block; margin-top: 0.25rem;">{% trans "Enable to override default AutoDock Vina box settings" %}</small>
+                                </div>
+                                <button class="preview-box-btn" id="preview-box-btn" type="button" disabled>
+                                    {% trans "Preview Box" %}
+                                </button>
+                                <button class="clear-box-btn" id="clear-box-btn" type="button" disabled>
+                                    {% trans "Clear" %}
+                                </button>
+                            </div>
+
+                            <!-- Execution Parameters Section -->
+                            <div class="execution-params-section">
+                                <h4 class="section-title">{% trans "Execution Parameters" %}</h4>
+
+                                <div class="config-row">
+                                    <div class="config-group">
+                                        <label for="exhaustiveness" class="config-label">{% trans "Exhaustiveness:" %}</label>
+                                        <input type="number" id="exhaustiveness" placeholder="8" min="1" max="100" class="config-input">
+                                        <small class="config-help">{% trans "Search thoroughness (higher = more thorough, slower)" %}</small>
+                                    </div>
+                                    <div class="config-group">
+                                        <label for="num-modes" class="config-label">{% trans "Number of Modes:" %}</label>
+                                        <input type="number" id="num-modes" placeholder="9" min="1" max="50" class="config-input">
+                                        <small class="config-help">{% trans "Maximum number of binding modes to generate" %}</small>
+                                    </div>
+                                    <div class="config-group">
+                                        <label for="energy-range" class="config-label">{% trans "Energy Range (kcal/mol):" %}</label>
+                                        <input type="number" id="energy-range" placeholder="3" min="1" max="10" step="0.1" class="config-input">
+                                        <small class="config-help">{% trans "Maximum energy difference between best and worst mode" %}</small>
+                                    </div>
+                                </div>
+
+                                <div class="config-row">
+                                    <div class="config-group">
+                                        <label for="cpu-cores" class="config-label">{% trans "CPU Cores:" %}</label>
+                                        <input type="number" id="cpu-cores" placeholder="4" min="1" max="32" class="config-input">
+                                        <small class="config-help">{% trans "Number of CPU cores to use for parallel processing" %}</small>
+                                    </div>
+                                    <div class="config-group">
+                                        <label for="seed" class="config-label">{% trans "Random Seed:" %}</label>
+                                        <input type="number" id="seed" placeholder="random" min="0" class="config-input">
+                                        <small class="config-help">{% trans "Seed for random number generator (for reproducible results)" %}</small>
+                                    </div>
+                                    <div class="config-group">
+                                        <label for="enable-custom-params" class="config-label">
+                                            <input type="checkbox" id="enable-custom-params">
+                                            {% trans "Use Custom Execution Parameters" %}
+                                        </label>
+                                        <small class="config-help">{% trans "Enable to override default AutoDock Vina execution settings" %}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="docking-controls">
+                    <button class="run-docking-btn" id="run-docking-btn" disabled>
+                        <img src="{% static 'frontend/img/icons/play.svg' %}" alt="PLAY" width="20" height="20" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                        {% trans "Run Molecular Docking with RePo-SUDOE-AI" %}
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3D Visualizer Section -->
+        <section id="output" class="section visualizer-section">
+            <div class="section-content">
+                <!-- Experiment Info Panel -->
+                <div id="experiment-info" class="experiment-info" style="display: none;">
+                    <div class="experiment-header">
+                        <h3>{% trans "Experiment Results" %}</h3>
+                        <div class="experiment-details">
+                            <span id="experiment-name">{% trans "No experiment loaded" %}</span>
+                            <span id="experiment-affinity" class="affinity-value">N/A</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="visualizer-container">
+                    <!-- Main Viewer Container -->
+                    <div class="viewer-main">
+                        <div class="viewer-header" >
+                            <span style="font-weight: 600;">{% trans "Docking Results - Molecular Structure" %}</span>
+                            <button id="download-pdbqt" class="download-btn" style="height:10px; margin-left: auto;"><img src="{% static 'frontend/img/downloads.png' %}" alt="{% trans 'Download' %}" class="download-icon" style="height: 15px;"> {% trans "Download files" %}</button>
+                        </div>
+                        <div class="viewer_3Dmoljs" id="output-viewer" style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <!-- Controls Panel -->
+                    <div class="controls-panel">
+                        <div class="controls-header">
+                            <h4>{% trans "Visualization Controls" %}</h4>
+                        </div>
+
+                        <div class="controls-content">
+                            <!-- Experiment Selection -->
+                            <div class="control-group">
+                                <label>{% trans "Files" %}</label>
+                                <select id="experiment-selector">
+                                    <option value="">{% trans "Select experiment..." %}</option>
+                                </select>
+                                <button id="load-selected-experiment">{% trans "Load" %}</button>
+                            </div>
+
+                            <!-- Pose Selection -->
+                            <div class="control-group">
+                                <label>{% trans "Docking Pose" %}</label>
+                                <select id="pose-selector">
+                                    <option value="">{% trans "Select pose..." %}</option>
+                                </select>
+                                <button id="load-selected-pose">{% trans "Load Pose" %}</button>
+                            </div>
+
+                            <!-- Receptor Style Controls -->
+                            <div class="control-group">
+                                <label>{% trans "Receptor Style" %}</label>
+                                <select id="receptor-style-selector">
+                                    <option value="cartoon">{% trans "Cartoon (Ribbon)" %}</option>
+                                    <option value="stick">{% trans "Stick" %}</option>
+                                    <option value="sphere">{% trans "Sphere" %}</option>
+                                    <option value="line">{% trans "Line" %}</option>
+                                </select>
+                                <select id="receptor-color-scheme">
+                                    <option value="spectrum">{% trans "Spectrum" %}</option>
+                                    <option value="chain">{% trans "By Chain" %}</option>
+                                    <option value="residue">{% trans "By Residue" %}</option>
+                                    <option value="default">{% trans "By Element" %}</option>
+                                </select>
+                                <button id="apply-receptor-style">{% trans "Apply" %}</button>
+                            </div>
+
+                            <!-- Ligand Style Controls -->
+                            <div class="control-group">
+                                <label>{% trans "Ligand Style" %}</label>
+                                <select id="ligand-style-selector">
+                                    <option value="stick">{% trans "Stick" %}</option>
+                                    <option value="sphere">{% trans "Sphere" %}</option>
+                                    <option value="line">{% trans "Line" %}</option>
+                                </select>
+                                <select id="ligand-color-scheme">
+                                    <option value="greenCarbon">{% trans "Green Carbon" %}</option>
+                                    <option value="default">{% trans "By Element" %}</option>
+                                    <option value="carbon">{% trans "Gray Carbon" %}</option>
+                                </select>
+                                <button id="apply-ligand-style">{% trans "Apply" %}</button>
+                            </div>
+
+                            <!-- View Controls -->
+                            <div class="control-group">
+                                <label>{% trans "View Controls" %}</label>
+                                <div class="button-group">
+                                    <button id="zoom-binding" class="control-btn">{% trans "Zoom to Binding Site" %}</button>
+                                    <button id="reset-view" class="control-btn">{% trans "Reset View" %}</button>
+                                </div>
+                            </div>
+
+                            <!-- Experiment Log Panel (Unified) -->
+                            <div class="info-panel" style="background: var(--bg-primary); color: var(--text-primary);">
+                                <h5 style="margin-bottom: 1rem; font-weight: 600;">{% trans "Experiment Log" %}</h5>
+                                <div id="molecule-info" style="font-family: 'Courier New', monospace; font-size: 0.85rem; max-height: 400px; overflow-y: auto; background: var(--bg-secondary); padding: 1rem; border-radius: 4px; color: var(--text-primary);">
+                                    <p>{% trans "Load an experiment to see detailed experiment logs and binding analysis." %}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Results Summary (when no 3D data) -->
+                <div id="results-fallback" class="output-content" style="display: none;">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 3DMol.js for molecular visualization (loaded before the bundle) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/3Dmol/1.8.0/3Dmol-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/3Dmol/1.8.0/3Dmol.ui-min.js"></script>
+
+    <!-- Vite bundle (TypeScript + TailwindCSS compiled output) -->
+    <script type="module" src="{% static 'frontend/dist/main.js' %}"></script>
+
+<footer class="footer">
+    <div class="footer-logos">
+        <img src="{% static 'frontend/img/cbmn-logo.png' %}" alt="CBMN Logo" class="footer-logo">
+        <img src="{% static 'frontend/img/citic-logo.png' %}" alt="CITIC Logo" class="footer-logo">
+        <img src="{% static 'frontend/img/cnrs-logo.png' %}" alt="CNRS Logo" class="footer-logo">
+        <img src="{% static 'frontend/img/csg-logo.png' %}" alt="CSG Logo" class="footer-logo">
+        <img src="{% static 'frontend/img/interreg_sudoe-logo.png' %}" alt="Interreg Sudoe Logo" class="footer-logo">
+        <img src="{% static 'frontend/img/mduse-logo.png' %}" alt="MDUSE Logo" class="footer-logo">
+        <img src="{% static 'frontend/img/spsp-logo.png' %}" alt="SPSP Logo" class="footer-logo">
+        <img src="{% static 'frontend/img/udc-logo.png' %}" alt="UDC Logo" class="footer-logo">
+        <img src="{% static 'frontend/img/usc-logo.png' %}" alt="USC Logo" class="footer-logo">
+    </div>
+</footer>
+</div>
+</body>
+
+</html>
