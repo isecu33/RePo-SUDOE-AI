@@ -1,0 +1,448 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-24 01:30+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\core\services\query_handler.py:184
+#, python-format
+msgid ""
+"¿Quieres lanzar un experimento de docking molecular entre %(drug)s y "
+"%(gene)s?"
+msgstr ""
+"Do you want to launch a molecular docking experiment between %(drug)s and "
+"%(gene)s?"
+
+#: .\core\services\query_handler.py:201
+#, python-format
+msgid "Se encontraron múltiples estructuras para %(gene)s:"
+msgstr "Multiple structures found for %(gene)s:"
+
+#: .\core\services\query_handler.py:235
+msgid "Archivos preparados. ¿Cómo quieres proceder?"
+msgstr "Files prepared. How do you want to proceed?"
+
+#: .\core\services\query_handler.py:248
+msgid "Archivos listos para descarga manual:"
+msgstr "Files ready for manual download:"
+
+#: .\core\services\query_handler.py:253
+msgid "Descarga los archivos y configura AutoDock Vina manualmente"
+msgstr "Download the files and configure AutoDock Vina manually"
+
+#: .\frontend\templates\frontend\index.html:23
+msgid "Chat"
+msgstr "Chat"
+
+#: .\frontend\templates\frontend\index.html:24
+msgid "Manual Mode"
+msgstr "Manual Mode"
+
+#: .\frontend\templates\frontend\index.html:25
+msgid "Output"
+msgstr "Output"
+
+#: .\frontend\templates\frontend\index.html:29
+msgid "Toggle Theme"
+msgstr "Toggle Theme"
+
+#: .\frontend\templates\frontend\index.html:31
+msgid "User"
+msgstr "User"
+
+#: .\frontend\templates\frontend\index.html:32
+msgid "Logout"
+msgstr "Logout"
+
+#: .\frontend\templates\frontend\index.html:49
+msgid "RePo-SUDOE-AI Molecular Docking Explorer"
+msgstr "RePo-SUDOE-AI Molecular Docking Explorer"
+
+#: .\frontend\templates\frontend\index.html:51
+msgid ""
+"Discover the fascinating world of molecular docking through AI-powered "
+"simulations using RePo-SUDOE-AI. Ask questions, explore drug-target "
+"interactions, and visualize molecular structures in 3D."
+msgstr ""
+"Discover the fascinating world of molecular docking through AI-powered "
+"simulations using RePo-SUDOE-AI. Ask questions, explore drug-target "
+"interactions, and visualize molecular structures in 3D."
+
+#: .\frontend\templates\frontend\index.html:53
+msgid "Try asking:"
+msgstr "Try asking:"
+
+#: .\frontend\templates\frontend\index.html:56
+msgid "Perform docking between Abemaciclib drug and A2M protein"
+msgstr "Perform docking between Abemaciclib drug and A2M protein"
+
+#: .\frontend\templates\frontend\index.html:57
+msgid "Give me information about the LZTS1 gene"
+msgstr "Give me information about the LZTS1 gene"
+
+#: .\frontend\templates\frontend\index.html:58
+msgid "Which genes in the database are related to tumor development?"
+msgstr "Which genes in the database are related to tumor development?"
+
+#: .\frontend\templates\frontend\index.html:64
+msgid "Type your message here..."
+msgstr "Type your message here..."
+
+#: .\frontend\templates\frontend\index.html:69
+msgid "Processing your request with RePo-SUDOE-AI..."
+msgstr "Processing your request with RePo-SUDOE-AI..."
+
+#: .\frontend\templates\frontend\index.html:83
+#: .\frontend\templates\frontend\index.html:132
+msgid "Receptor"
+msgstr "Receptor"
+
+#: .\frontend\templates\frontend\index.html:84
+#: .\frontend\templates\frontend\index.html:97
+#: .\frontend\templates\frontend\index.html:110
+msgid "Upload"
+msgstr "Upload"
+
+#: .\frontend\templates\frontend\index.html:85
+#: .\frontend\templates\frontend\index.html:98
+#: .\frontend\templates\frontend\index.html:111
+msgid "Choose a file or drop it here..."
+msgstr "Choose a file or drop it here..."
+
+#: .\frontend\templates\frontend\index.html:87
+msgid "Formats:: PDBQT (best), PDB, ENT, XYZ, PQR, MCIF, MMCIF"
+msgstr "Formats: PDBQT (best), PDB, ENT, XYZ, PQR, MCIF, MMCIF"
+
+#: .\frontend\templates\frontend\index.html:90
+msgid "If PDB, be sure to add polar hydrogen atoms."
+msgstr "If PDB, be sure to add polar hydrogen atoms."
+
+#: .\frontend\templates\frontend\index.html:96
+#: .\frontend\templates\frontend\index.html:139
+msgid "Drug"
+msgstr "Drug"
+
+#: .\frontend\templates\frontend\index.html:100
+msgid ""
+"Formats:: PDBQT (best), CAN, MDL, MOL, MOL2, PDB, SD, SDF, SMI, SMILES, XYZ"
+msgstr ""
+"Formats: PDBQT (best), CAN, MDL, MOL, MOL2, PDB, SD, SDF, SMI, SMILES, XYZ"
+
+#: .\frontend\templates\frontend\index.html:103
+msgid "We recommend preparing drug files separately with Gypsum-DL."
+msgstr "We recommend preparing drug files separately with Gypsum-DL."
+
+#: .\frontend\templates\frontend\index.html:109
+msgid "Correct Pose"
+msgstr "Correct Pose"
+
+#: .\frontend\templates\frontend\index.html:113
+msgid "Formats:: PDBQT or PDB"
+msgstr "Formats: PDBQT or PDB"
+
+#: .\frontend\templates\frontend\index.html:116
+msgid ""
+"The correct drug pose, if known from experiment. This file is optional."
+msgstr ""
+"The correct drug pose, if known from experiment. This file is optional."
+
+#: .\frontend\templates\frontend\index.html:127
+msgid "Molecular Structure Preview"
+msgstr "Molecular Structure Preview"
+
+#: .\frontend\templates\frontend\index.html:135
+#: .\frontend\templates\frontend\index.html:142
+#: .\frontend\templates\frontend\index.html:149
+msgid "Change"
+msgstr "Change"
+
+#: .\frontend\templates\frontend\index.html:146
+msgid "Pose"
+msgstr "Pose"
+
+#: .\frontend\templates\frontend\index.html:165
+msgid "Legend:"
+msgstr "Legend:"
+
+#: .\frontend\templates\frontend\index.html:168
+msgid "Receptor (Cartoon/Ribbon)"
+msgstr "Receptor (Cartoon/Ribbon)"
+
+#: .\frontend\templates\frontend\index.html:171
+msgid "Drug (Stick representation)"
+msgstr "Drug (Stick representation)"
+
+#: .\frontend\templates\frontend\index.html:174
+msgid "Pose (Ball & Stick)"
+msgstr "Pose (Ball & Stick)"
+
+#: .\frontend\templates\frontend\index.html:185
+msgid "Docking Box Parameters"
+msgstr "Docking Box Parameters"
+
+#: .\frontend\templates\frontend\index.html:191
+msgid "Center X (Å):"
+msgstr "Center X (Å):"
+
+#: .\frontend\templates\frontend\index.html:195
+msgid "Center Y (Å):"
+msgstr "Center Y (Å):"
+
+#: .\frontend\templates\frontend\index.html:199
+msgid "Center Z (Å):"
+msgstr "Center Z (Å):"
+
+#: .\frontend\templates\frontend\index.html:206
+msgid "Size X (Å):"
+msgstr "Size X (Å):"
+
+#: .\frontend\templates\frontend\index.html:210
+msgid "Size Y (Å):"
+msgstr "Size Y (Å):"
+
+#: .\frontend\templates\frontend\index.html:214
+msgid "Size Z (Å):"
+msgstr "Size Z (Å):"
+
+#: .\frontend\templates\frontend\index.html:223
+msgid "Use Custom Box Parameters"
+msgstr "Use Custom Box Parameters"
+
+#: .\frontend\templates\frontend\index.html:225
+msgid "Enable to override default AutoDock Vina box settings"
+msgstr "Enable to override default AutoDock Vina box settings"
+
+#: .\frontend\templates\frontend\index.html:230
+msgid "Preview Box"
+msgstr "Preview Box"
+
+#: .\frontend\templates\frontend\index.html:233
+msgid "Clear"
+msgstr "Clear"
+
+#: .\frontend\templates\frontend\index.html:241
+msgid "Execution Parameters"
+msgstr "Execution Parameters"
+
+#: .\frontend\templates\frontend\index.html:245
+msgid "Exhaustiveness:"
+msgstr "Exhaustiveness:"
+
+#: .\frontend\templates\frontend\index.html:247
+msgid "Search thoroughness (higher = more thorough, slower)"
+msgstr "Search thoroughness (higher = more thorough, slower)"
+
+#: .\frontend\templates\frontend\index.html:250
+msgid "Number of Modes:"
+msgstr "Number of Modes:"
+
+#: .\frontend\templates\frontend\index.html:252
+msgid "Maximum number of binding modes to generate"
+msgstr "Maximum number of binding modes to generate"
+
+#: .\frontend\templates\frontend\index.html:255
+msgid "Energy Range (kcal/mol):"
+msgstr "Energy Range (kcal/mol):"
+
+#: .\frontend\templates\frontend\index.html:257
+msgid "Maximum energy difference between best and worst mode"
+msgstr "Maximum energy difference between best and worst mode"
+
+#: .\frontend\templates\frontend\index.html:263
+msgid "CPU Cores:"
+msgstr "CPU Cores:"
+
+#: .\frontend\templates\frontend\index.html:265
+msgid "Number of CPU cores to use for parallel processing"
+msgstr "Number of CPU cores to use for parallel processing"
+
+#: .\frontend\templates\frontend\index.html:268
+msgid "Random Seed:"
+msgstr "Random Seed:"
+
+#: .\frontend\templates\frontend\index.html:270
+msgid "Seed for random number generator (for reproducible results)"
+msgstr "Seed for random number generator (for reproducible results)"
+
+#: .\frontend\templates\frontend\index.html:275
+msgid "Use Custom Execution Parameters"
+msgstr "Use Custom Execution Parameters"
+
+#: .\frontend\templates\frontend\index.html:277
+msgid "Enable to override default AutoDock Vina execution settings"
+msgstr "Enable to override default AutoDock Vina execution settings"
+
+#: .\frontend\templates\frontend\index.html:287
+msgid "Run Molecular Docking with RePo-SUDOE-AI"
+msgstr "Run Molecular Docking with RePo-SUDOE-AI"
+
+#: .\frontend\templates\frontend\index.html:299
+msgid "Experiment Results"
+msgstr "Experiment Results"
+
+#: .\frontend\templates\frontend\index.html:301
+msgid "No experiment loaded"
+msgstr "No experiment loaded"
+
+#: .\frontend\templates\frontend\index.html:311
+msgid "Docking Results - Molecular Structure"
+msgstr "Docking Results - Molecular Structure"
+
+#: .\frontend\templates\frontend\index.html:312
+msgid "Download"
+msgstr "Download"
+
+#: .\frontend\templates\frontend\index.html:312
+msgid "Download files"
+msgstr "Download files"
+
+#: .\frontend\templates\frontend\index.html:326
+msgid "Visualization Controls"
+msgstr "Visualization Controls"
+
+#: .\frontend\templates\frontend\index.html:332
+msgid "Files"
+msgstr "Files"
+
+#: .\frontend\templates\frontend\index.html:334
+msgid "Select experiment..."
+msgstr "Select experiment..."
+
+#: .\frontend\templates\frontend\index.html:336
+msgid "Load"
+msgstr "Load"
+
+#: .\frontend\templates\frontend\index.html:341
+msgid "Style"
+msgstr "Style"
+
+#: .\frontend\templates\frontend\index.html:343
+msgid "Stick (Bonds)"
+msgstr "Stick (Bonds)"
+
+#: .\frontend\templates\frontend\index.html:344
+msgid "Sphere (Space-filling)"
+msgstr "Sphere (Space-filling)"
+
+#: .\frontend\templates\frontend\index.html:345
+msgid "Cartoon (Protein)"
+msgstr "Cartoon (Protein)"
+
+#: .\frontend\templates\frontend\index.html:346
+msgid "Line (Wireframe)"
+msgstr "Line (Wireframe)"
+
+#: .\frontend\templates\frontend\index.html:348
+#: .\frontend\templates\frontend\index.html:363
+msgid "Apply"
+msgstr "Apply"
+
+#: .\frontend\templates\frontend\index.html:353
+msgid "Color Scheme"
+msgstr "Color Scheme"
+
+#: .\frontend\templates\frontend\index.html:355
+msgid "By Element (CPK)"
+msgstr "By Element (CPK)"
+
+#: .\frontend\templates\frontend\index.html:356
+msgid "Carbon Gray"
+msgstr "Carbon Gray"
+
+#: .\frontend\templates\frontend\index.html:357
+msgid "Chain Rainbow"
+msgstr "Chain Rainbow"
+
+#: .\frontend\templates\frontend\index.html:358
+msgid "By Residue"
+msgstr "By Residue"
+
+#: .\frontend\templates\frontend\index.html:359
+msgid "Spectrum"
+msgstr "Spectrum"
+
+#: .\frontend\templates\frontend\index.html:360
+msgid "By Chain"
+msgstr "By Chain"
+
+#: .\frontend\templates\frontend\index.html:361
+msgid "By Atom Type"
+msgstr "By Atom Type"
+
+#: .\frontend\templates\frontend\index.html:368
+msgid "View Controls"
+msgstr "View Controls"
+
+#: .\frontend\templates\frontend\index.html:370
+msgid "Zoom to Binding Site"
+msgstr "Zoom to Binding Site"
+
+#: .\frontend\templates\frontend\index.html:371
+msgid "Reset View"
+msgstr "Reset View"
+
+#: .\frontend\templates\frontend\index.html:378
+msgid ""
+"Load an experiment to see detailed experiment logs and binding analysis."
+msgstr ""
+"Load an experiment to see detailed experiment logs and binding analysis."
+
+# Binding Affinity Classification
+msgid "Afinidad desconocida"
+msgstr "Unknown affinity"
+
+msgid "Muy fuerte"
+msgstr "Very strong"
+
+msgid "Muy interesante"
+msgstr "Very interesting"
+
+msgid "Muy buena"
+msgstr "Very good"
+
+msgid "Interesante para estudio"
+msgstr "Interesting for study"
+
+msgid "Buena afinidad"
+msgstr "Good affinity"
+
+msgid "Interacción moderada"
+msgstr "Moderate interaction"
+
+msgid "Débil / Irrelevante"
+msgstr "Weak / Irrelevant"
+
+msgid "Docking completado"
+msgstr "Docking completed"
+
+msgid "pose"
+msgstr "pose"
+
+msgid "poses"
+msgstr "poses"
+
+msgid "generadas"
+msgstr "generated"
+
+msgid "Docking completado pero no se encontraron resultados"
+msgstr "Docking completed but no results were found"
+
+msgid "Docking experiment completed successfully"
+msgstr "Docking experiment completed successfully"
+
+msgid "Error during docking experiment"
+msgstr "Error during docking experiment"

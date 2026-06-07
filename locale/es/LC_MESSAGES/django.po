@@ -1,0 +1,749 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-10 23:06+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: .\accounts\templates\accounts\about.html:8
+msgid "About Us"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:387
+msgid "Back to Login"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:391
+msgid "About RePo-SUDOE-AI"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:392
+msgid ""
+"Advancing molecular docking research through innovation and collaboration"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:412
+msgid "Our Mission"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:414
+msgid ""
+"RePo-SUDOE-AI is dedicated to democratizing access to cutting-edge "
+"computational chemistry tools. We believe that advanced molecular docking "
+"simulations should be accessible to researchers at all levels, from "
+"undergraduate students to leading scientists in pharmaceutical companies."
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:417
+msgid ""
+"Our platform combines state-of-the-art algorithms with an intuitive user "
+"interface, making complex molecular interactions understandable and "
+"actionable. We are committed to accelerating drug discovery research across "
+"Europe and beyond."
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:420
+msgid ""
+"Through continuous innovation and collaboration with leading research "
+"institutions, we strive to provide the most advanced, reliable, and user-"
+"friendly molecular docking platform available."
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:435
+msgid "Meet Our Team"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:436
+msgid "Building the future of accessible molecular docking"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:446
+msgid "Platform Developer & Researcher"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:448
+msgid ""
+"Iker is the lead developer of the RePo-SUDOE-AI platform, working on his "
+"thesis to create an accessible and intuitive molecular docking tool. He "
+"combines expertise in software engineering with a passion for computational "
+"chemistry, building upon frameworks like webina to create innovative "
+"solutions for drug discovery research."
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:452
+msgid "University of A Coruña"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:463
+msgid "Thesis Director & Scientific Advisor"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:465
+msgid ""
+"Carlos provides scientific guidance and expertise in computational biology "
+"and bioinformatics. As thesis director, he oversees the development of the "
+"platform, ensuring it meets the highest standards of scientific rigor while "
+"remaining accessible to researchers. His experience in machine learning and "
+"data analysis shapes the strategic direction of the project."
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:469
+msgid "CITIC Research Center, University of A Coruña"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:482
+msgid "Platform Foundation"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:484
+msgid ""
+"The RePo-SUDOE-AI platform is another step forward in advancing scientific "
+"knowledge and promoting the use of new technologies for drug repurposing in "
+"the SUDOE region. By applying available previous knowledge, we developed a "
+"system that allows users to run molecular docking experiments simply by "
+"using natural language, and to visualize therapeutic targets and their "
+"interactions with drugs in a 3D format. This interactive and educational "
+"approach is designed to motivate young students and researchers in STEAM "
+"fields."
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:487
+msgid ""
+"The platform has an easy-to-use interface that lets users perform molecular "
+"docking experiments and view the results in interactive 3D directly from "
+"their browser, making complex methods easier to use for both researchers and"
+" students."
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:490
+msgid ""
+"One of our main goals is to develop and share advanced technologies for drug"
+" repurposing, making this innovation accessible to everyone. In addition, "
+"the prototype aims to serve as a starting point for a new educational model "
+"in the SUDOE region, helping less developed areas and addressing population "
+"challenges."
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:505
+msgid "About the RePo-SUDOE Project"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:507
+msgid ""
+"Drug Repurposing for Effective and Accelerated Drug Development in the SUDOE"
+" Space"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:514
+msgid "The Challenge"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:517
+msgid ""
+"The pharmaceutical development process often faces high failure rates, "
+"costs, and delays. This highlights the importance of drug repurposing, which"
+" finds new therapeutic uses for existing market drugs, benefiting the "
+"pharmaceutical industry, society, and patients alike."
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:523
+msgid "Our Goal"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:526
+msgid ""
+"The RePo-SUDOE project aims to develop and disseminate drug repurposing "
+"technologies to enhance the competitiveness of the SUDOE region in this R&D "
+"area, boosting the biopharmaceutical industry and attracting skilled human "
+"resources."
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:532
+msgid "Key Objectives"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:536
+msgid ""
+"Advance scientific knowledge and disseminate drug repurposing technologies "
+"among public and private agents, elevating SUDOE's R&D groups to European "
+"excellence."
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:539
+msgid ""
+"Foster multidisciplinary collaboration and identify innovative opportunities"
+" in SUDOE through a transnational network, developing a database of "
+"therapeutic targets and drugs, with a primary focus on cancer treatment."
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:542
+msgid ""
+"Create a prototype 3D visualization room for biological systems, utilizing "
+"VR and AR, aimed at young students and researchers in STEAM fields."
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:549
+msgid "Regional Impact"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:552
+msgid ""
+"RePo-SUDOE unites partners from different SUDOE regions and sectors within "
+"the pharmaceutical development value chain. It provides easily accessible "
+"scientific information and visualization technologies to strengthen drug "
+"repurposing within the SUDOE space."
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:555
+msgid ""
+"The project addresses demographic challenges of aging and depopulation, "
+"enhancing regional R&D competitiveness and bridging territorial disparities."
+" By aligning with regional RIS3 strategies, RePo-SUDOE fosters innovation "
+"and sustainable employment growth, particularly in regions with "
+"traditionally low R&D intensity."
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:561
+msgid "Learn more about the INTERREG SUDOE initiative"
+msgstr ""
+
+#: .\accounts\templates\accounts\about.html:565
+msgid "Visit Project Website"
+msgstr ""
+
+#: .\core\services\query_handler.py:207
+#, python-format
+msgid ""
+"¿Quieres lanzar un experimento de docking molecular entre %(drug)s y "
+"%(gene)s?"
+msgstr ""
+"¿Quieres lanzar un experimento de docking molecular entre %(drug)s y "
+"%(gene)s?"
+
+#: .\core\services\query_handler.py:224
+#, python-format
+msgid "Se encontraron múltiples estructuras para %(gene)s:"
+msgstr "Se encontraron múltiples estructuras para %(gene)s:"
+
+#: .\core\services\query_handler.py:272
+msgid "Archivos preparados. ¿Cómo quieres proceder?"
+msgstr "Archivos preparados. ¿Cómo quieres proceder?"
+
+#: .\core\services\query_handler.py:286
+msgid "Archivos listos para descarga manual:"
+msgstr "Archivos listos para descarga manual:"
+
+#: .\core\services\query_handler.py:291
+msgid "Descarga los archivos y configura AutoDock Vina manualmente"
+msgstr "Descarga los archivos y configura AutoDock Vina manualmente"
+
+#: .\core\services\query_handler.py:1127
+#, python-brace-format
+msgid "Drug '{drug_name}' not found in database."
+msgstr ""
+
+#: .\core\services\query_handler.py:1130
+#, python-brace-format
+msgid "Similar drugs available: {drugs}"
+msgstr ""
+
+#: .\core\services\query_handler.py:1142
+#, python-brace-format
+msgid "Gene '{gene_name}' not found in database."
+msgstr ""
+
+#: .\core\services\query_handler.py:1145
+#, python-brace-format
+msgid "Similar symbols: {symbols}"
+msgstr ""
+
+#: .\core\services\query_handler.py:1147
+#, python-brace-format
+msgid "Similar genes: {genes}"
+msgstr ""
+
+#: .\core\services\query_handler.py:1155
+#, python-brace-format
+msgid "Available genes: {genes}"
+msgstr ""
+
+#: .\core\services\query_handler.py:1165
+#, python-brace-format
+msgid "Gene '{gene_name}' has no PDB structures available."
+msgstr ""
+
+#: .\frontend\templates\frontend\index.html:24
+msgid "Chat"
+msgstr "Chat"
+
+#: .\frontend\templates\frontend\index.html:25
+msgid "Manual Mode"
+msgstr "Modo Manual"
+
+#: .\frontend\templates\frontend\index.html:26
+msgid "Output"
+msgstr "Salida"
+
+#: .\frontend\templates\frontend\index.html:30
+msgid "Toggle Theme"
+msgstr "Cambiar Tema"
+
+#: .\frontend\templates\frontend\index.html:32
+msgid "User"
+msgstr "Usuario"
+
+#: .\frontend\templates\frontend\index.html:33
+msgid "Logout"
+msgstr "Cerrar Sesión"
+
+#: .\frontend\templates\frontend\index.html:50
+msgid "RePo-SUDOE-AI Molecular Docking Explorer"
+msgstr "Explorador de Acoplamiento Molecular RePo-SUDOE-AI"
+
+#: .\frontend\templates\frontend\index.html:52
+msgid ""
+"Discover the fascinating world of molecular docking through AI-powered "
+"simulations using RePo-SUDOE-AI. Ask questions, explore drug-target "
+"interactions, and visualize molecular structures in 3D."
+msgstr ""
+"Descubre el fascinante mundo del acoplamiento molecular a través de "
+"simulaciones impulsadas por IA usando RePo-SUDOE-AI. Haz preguntas, explora "
+"interacciones fármaco-diana y visualiza estructuras moleculares en 3D."
+
+#: .\frontend\templates\frontend\index.html:54
+msgid "Try asking:"
+msgstr "Prueba a preguntar:"
+
+#: .\frontend\templates\frontend\index.html:57
+msgid "Perform docking between Abemaciclib drug and A2M protein"
+msgstr "Haz el docking entre el fármaco Abemaciclib y la proteína A2M"
+
+#: .\frontend\templates\frontend\index.html:58
+msgid "Give me information about the LZTS1 gene"
+msgstr "Dame información acerca del gen LZTS1"
+
+#: .\frontend\templates\frontend\index.html:59
+msgid "Which genes in the database are related to tumor development?"
+msgstr ""
+"¿Qué genes de los presentes en la base de datos están relacionados con la "
+"aparición de tumores?"
+
+#: .\frontend\templates\frontend\index.html:65
+msgid "Type your message here..."
+msgstr "Escribe tu mensaje aquí..."
+
+#: .\frontend\templates\frontend\index.html:70
+msgid "Processing your request with RePo-SUDOE-AI..."
+msgstr "Procesando tu solicitud con RePo-SUDOE-AI..."
+
+#: .\frontend\templates\frontend\index.html:82
+#: .\frontend\templates\frontend\index.html:119
+msgid "Receptor"
+msgstr "Receptor"
+
+#: .\frontend\templates\frontend\index.html:83
+#: .\frontend\templates\frontend\index.html:93
+#: .\frontend\templates\frontend\index.html:103
+msgid "Upload"
+msgstr "Cargar"
+
+#: .\frontend\templates\frontend\index.html:84
+#: .\frontend\templates\frontend\index.html:94
+#: .\frontend\templates\frontend\index.html:104
+msgid "Choose a file or drop it here..."
+msgstr "Elige un archivo o arrástralo aquí..."
+
+#: .\frontend\templates\frontend\index.html:86
+msgid "Formats:: PDBQT (best), PDB, ENT, XYZ, PQR, MCIF, MMCIF"
+msgstr "Formatos:: PDBQT (mejor), PDB, ENT, XYZ, PQR, MCIF, MMCIF"
+
+#: .\frontend\templates\frontend\index.html:92
+#: .\frontend\templates\frontend\index.html:126
+msgid "Drug"
+msgstr "Fármaco"
+
+#: .\frontend\templates\frontend\index.html:96
+msgid ""
+"Formats:: PDBQT (best), CAN, MDL, MOL, MOL2, PDB, SD, SDF, SMI, SMILES, XYZ"
+msgstr ""
+"Formatos:: PDBQT (mejor), CAN, MDL, MOL, MOL2, PDB, SD, SDF, SMI, SMILES, "
+"XYZ"
+
+#: .\frontend\templates\frontend\index.html:102
+#, fuzzy
+#| msgid "Correct Pose"
+msgid "Correct Pose (optional)"
+msgstr "Pose Correcta"
+
+#: .\frontend\templates\frontend\index.html:106
+msgid "Formats:: PDBQT or PDB"
+msgstr "Formatos:: PDBQT o PDB"
+
+#: .\frontend\templates\frontend\index.html:122
+#: .\frontend\templates\frontend\index.html:129
+#: .\frontend\templates\frontend\index.html:136
+msgid "Change"
+msgstr "Cambiar"
+
+#: .\frontend\templates\frontend\index.html:133
+msgid "Pose"
+msgstr "Pose"
+
+#: .\frontend\templates\frontend\index.html:152
+msgid "Docking Box Parameters"
+msgstr "Parámetros de Caja de Docking"
+
+#: .\frontend\templates\frontend\index.html:160
+msgid "Center X (Å):"
+msgstr "Centro X (Å):"
+
+#: .\frontend\templates\frontend\index.html:164
+msgid "Center Y (Å):"
+msgstr "Centro Y (Å):"
+
+#: .\frontend\templates\frontend\index.html:168
+msgid "Center Z (Å):"
+msgstr "Centro Z (Å):"
+
+#: .\frontend\templates\frontend\index.html:176
+msgid "Size X (Å):"
+msgstr "Tamaño X (Å):"
+
+#: .\frontend\templates\frontend\index.html:180
+msgid "Size Y (Å):"
+msgstr "Tamaño Y (Å):"
+
+#: .\frontend\templates\frontend\index.html:184
+msgid "Size Z (Å):"
+msgstr "Tamaño Z (Å):"
+
+#: .\frontend\templates\frontend\index.html:194
+msgid "Use Custom Box Parameters"
+msgstr "Usar Parámetros de Caja Personalizados"
+
+#: .\frontend\templates\frontend\index.html:196
+msgid "Enable to override default AutoDock Vina box settings"
+msgstr ""
+"Habilitar para sobrescribir la configuración predeterminada de caja de "
+"AutoDock Vina"
+
+#: .\frontend\templates\frontend\index.html:201
+msgid "Preview Box"
+msgstr "Vista Previa de Caja"
+
+#: .\frontend\templates\frontend\index.html:204
+msgid "Clear"
+msgstr "Limpiar"
+
+#: .\frontend\templates\frontend\index.html:213
+msgid "Execution Parameters"
+msgstr "Parámetros de Ejecución"
+
+#: .\frontend\templates\frontend\index.html:217
+msgid "Exhaustiveness:"
+msgstr "Exhaustividad:"
+
+#: .\frontend\templates\frontend\index.html:219
+#, fuzzy
+#| msgid "Search thoroughness (higher = + thorough, slower)"
+msgid "Search thoroughness (higher = more thorough, slower)"
+msgstr " Profundidad de búsqueda (mayor = + detalle, +lento)"
+
+#: .\frontend\templates\frontend\index.html:222
+msgid "Number of Modes:"
+msgstr "Número de Modos:"
+
+#: .\frontend\templates\frontend\index.html:224
+msgid "Maximum number of binding modes to generate"
+msgstr "Número máximo de modos de enlace a generar"
+
+#: .\frontend\templates\frontend\index.html:227
+msgid "Energy Range (kcal/mol):"
+msgstr "Rango de Energía (kcal/mol):"
+
+#: .\frontend\templates\frontend\index.html:229
+msgid "Maximum energy difference between best and worst mode"
+msgstr "Diferencia máxima de energía entre el mejor y el peor modo"
+
+#: .\frontend\templates\frontend\index.html:235
+msgid "CPU Cores:"
+msgstr "Núcleos de CPU:"
+
+#: .\frontend\templates\frontend\index.html:237
+msgid "Number of CPU cores to use for parallel processing"
+msgstr "Número de núcleos de CPU (procesamiento paralelo)"
+
+#: .\frontend\templates\frontend\index.html:240
+msgid "Random Seed:"
+msgstr "Semilla Aleatoria:"
+
+#: .\frontend\templates\frontend\index.html:242
+#, fuzzy
+#| msgid "Determine seed for reproducible results"
+msgid "Seed for random number generator (for reproducible results)"
+msgstr "Estipular semilla para resultados reproducibles"
+
+#: .\frontend\templates\frontend\index.html:247
+msgid "Use Custom Execution Parameters"
+msgstr "Usar Parámetros de Ejecución Personalizados"
+
+#: .\frontend\templates\frontend\index.html:249
+msgid "Enable to override default AutoDock Vina execution settings"
+msgstr ""
+"Habilitar para sobrescribir la configuración de ejecución predeterminada de "
+"AutoDock Vina"
+
+#: .\frontend\templates\frontend\index.html:260
+msgid "Run Molecular Docking with RePo-SUDOE-AI"
+msgstr "Ejecutar Acoplamiento Molecular con RePo-SUDOE-AI"
+
+#: .\frontend\templates\frontend\index.html:272
+msgid "Experiment Results"
+msgstr "Resultados del Experimento"
+
+#: .\frontend\templates\frontend\index.html:274
+msgid "No experiment loaded"
+msgstr "No hay experimento cargado"
+
+#: .\frontend\templates\frontend\index.html:284
+msgid "Docking Results - Molecular Structure"
+msgstr "Resultados de Docking - Estructura Molecular"
+
+#: .\frontend\templates\frontend\index.html:285
+msgid "Download"
+msgstr "Descargar"
+
+#: .\frontend\templates\frontend\index.html:285
+msgid "Download files"
+msgstr "Descargar archivos"
+
+#: .\frontend\templates\frontend\index.html:294
+msgid "Visualization Controls"
+msgstr "Controles de Visualización"
+
+#: .\frontend\templates\frontend\index.html:300
+msgid "Files"
+msgstr "Archivos"
+
+#: .\frontend\templates\frontend\index.html:302
+msgid "Select experiment..."
+msgstr "Seleccionar experimento..."
+
+#: .\frontend\templates\frontend\index.html:304
+msgid "Load"
+msgstr "Cargar"
+
+#: .\frontend\templates\frontend\index.html:309
+msgid "Docking Pose"
+msgstr ""
+
+#: .\frontend\templates\frontend\index.html:311
+#, fuzzy
+#| msgid "Select experiment..."
+msgid "Select pose..."
+msgstr "Seleccionar experimento..."
+
+#: .\frontend\templates\frontend\index.html:313
+#, fuzzy
+#| msgid "Pose"
+msgid "Load Pose"
+msgstr "Pose"
+
+#: .\frontend\templates\frontend\index.html:318
+#, fuzzy
+#| msgid "Receptor"
+msgid "Receptor Style"
+msgstr "Receptor"
+
+#: .\frontend\templates\frontend\index.html:320
+#, fuzzy
+#| msgid "Cartoon (Protein)"
+msgid "Cartoon (Ribbon)"
+msgstr "Caricatura (Proteína)"
+
+#: .\frontend\templates\frontend\index.html:321
+#: .\frontend\templates\frontend\index.html:338
+msgid "Stick"
+msgstr ""
+
+#: .\frontend\templates\frontend\index.html:322
+#: .\frontend\templates\frontend\index.html:339
+msgid "Sphere"
+msgstr ""
+
+#: .\frontend\templates\frontend\index.html:323
+#: .\frontend\templates\frontend\index.html:340
+msgid "Line"
+msgstr ""
+
+#: .\frontend\templates\frontend\index.html:326
+msgid "Spectrum"
+msgstr "Espectro"
+
+#: .\frontend\templates\frontend\index.html:327
+msgid "By Chain"
+msgstr "Por Cadena"
+
+#: .\frontend\templates\frontend\index.html:328
+msgid "By Residue"
+msgstr "Por Residuo"
+
+#: .\frontend\templates\frontend\index.html:329
+#: .\frontend\templates\frontend\index.html:344
+#, fuzzy
+#| msgid "By Element (CPK)"
+msgid "By Element"
+msgstr "Por Elemento (CPK)"
+
+#: .\frontend\templates\frontend\index.html:331
+#: .\frontend\templates\frontend\index.html:347
+msgid "Apply"
+msgstr "Aplicar"
+
+#: .\frontend\templates\frontend\index.html:336
+msgid "Ligand Style"
+msgstr ""
+
+#: .\frontend\templates\frontend\index.html:343
+msgid "Green Carbon"
+msgstr ""
+
+#: .\frontend\templates\frontend\index.html:345
+msgid "Gray Carbon"
+msgstr ""
+
+#: .\frontend\templates\frontend\index.html:352
+msgid "View Controls"
+msgstr "Controles de Vista"
+
+#: .\frontend\templates\frontend\index.html:354
+msgid "Zoom to Binding Site"
+msgstr "Acercar al Sitio de Enlace"
+
+#: .\frontend\templates\frontend\index.html:355
+msgid "Reset View"
+msgstr "Restablecer Vista"
+
+#: .\frontend\templates\frontend\index.html:361
+#, fuzzy
+#| msgid "Experiment Results"
+msgid "Experiment Log"
+msgstr "Resultados del Experimento"
+
+#: .\frontend\templates\frontend\index.html:363
+msgid ""
+"Load an experiment to see detailed experiment logs and binding analysis."
+msgstr ""
+"Carga un experimento para ver registros detallados del experimento y "
+"análisis de enlace."
+
+# Binding Affinity Classification
+msgid "Afinidad desconocida"
+msgstr "Afinidad desconocida"
+
+msgid "Muy fuerte"
+msgstr "Muy fuerte"
+
+msgid "Muy interesante"
+msgstr "Muy interesante"
+
+msgid "Muy buena"
+msgstr "Muy buena"
+
+msgid "Interesante para estudio"
+msgstr "Interesante para estudio"
+
+msgid "Buena afinidad"
+msgstr "Buena afinidad"
+
+msgid "Interacción moderada"
+msgstr "Interacción moderada"
+
+msgid "Débil / Irrelevante"
+msgstr "Débil / Irrelevante"
+
+msgid "Docking completado"
+msgstr "Docking completado"
+
+msgid "pose"
+msgstr "pose"
+
+msgid "poses"
+msgstr "poses"
+
+msgid "generadas"
+msgstr "generadas"
+
+msgid "Docking completado pero no se encontraron resultados"
+msgstr "Docking completado pero no se encontraron resultados"
+
+msgid "Docking experiment completed successfully"
+msgstr "Experimento de docking completado exitosamente"
+
+msgid "Error during docking experiment"
+msgstr "Error durante el experimento de docking"
+
+#~ msgid "If PDB, be sure to add polar hydrogen atoms."
+#~ msgstr "Si es PDB, asegúrate de añadir átomos de hidrógeno polar."
+
+#~ msgid "We recommend preparing drug files separately with Gypsum-DL."
+#~ msgstr ""
+#~ "Recomendamos preparar los archivos de fármacos por separado con Gypsum-DL."
+
+#~ msgid ""
+#~ "The correct drug pose, if known from experiment. This file is optional."
+#~ msgstr ""
+#~ "La pose correcta del fármaco, si se conoce por experimento. Este archivo es "
+#~ "opcional."
+
+#~ msgid "Molecular Structure Preview"
+#~ msgstr "Vista Previa de Estructura Molecular"
+
+#~ msgid "Legend:"
+#~ msgstr "Leyenda:"
+
+#~ msgid "Receptor (Cartoon/Ribbon)"
+#~ msgstr "Receptor (Caricatura/Cinta)"
+
+#~ msgid "Drug (Stick representation)"
+#~ msgstr "Fármaco (Representación de barras)"
+
+#~ msgid "Pose (Ball & Stick)"
+#~ msgstr "Pose (Bola y barra)"
+
+#~ msgid "Style"
+#~ msgstr "Estilo"
+
+#~ msgid "Stick (Bonds)"
+#~ msgstr "Barras (Enlaces)"
+
+#~ msgid "Sphere (Space-filling)"
+#~ msgstr "Esfera (Relleno espacial)"
+
+#~ msgid "Line (Wireframe)"
+#~ msgstr "Línea (Estructura de alambre)"
+
+#~ msgid "Color Scheme"
+#~ msgstr "Esquema de Color"
+
+#~ msgid "Carbon Gray"
+#~ msgstr "Gris Carbono"
+
+#~ msgid "Chain Rainbow"
+#~ msgstr "Arcoíris de Cadena"
+
+#~ msgid "By Atom Type"
+#~ msgstr "Por Tipo de Átomo"
