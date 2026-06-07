@@ -1,0 +1,22 @@
+{
+  "name": "repo-sudoe-ai-frontend",
+  "version": "2.0.0",
+  "description": "Frontend moderno (Vite + TypeScript + Tailwind) para RePo-SUDOE-AI",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "build:fast": "vite build",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.1"
+  },
+  "type": "module"
+}
