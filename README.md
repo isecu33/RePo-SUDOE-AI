@@ -19,9 +19,19 @@
 
 ---
 
-## Screenshot
+## Screenshots
 
-> 📸 *Añadir captura de pantalla aquí: reemplaza esta línea con `![Screenshot](docs/screenshot.png)` una vez tengas la captura.*
+| Login | Chat AI |
+|-------|---------|
+| ![Login](docs/login-page.png) | ![Chat UI](docs/chat-ui.png) |
+
+| Solicitud de docking por chat | Modo manual — parámetros |
+|-------------------------------|--------------------------|
+| ![Chat docking](docs/chat-message.png) | ![Manual mode](docs/manual-mode-1.png) |
+
+| Resultados — visualización 3D |
+|-------------------------------|
+| ![Output 3D](docs/output.png) |
 
 ---
 
@@ -155,38 +165,55 @@ docker compose --profile production up -d
 
 ```
 RePo-SUDOE-AI/
-├── accounts/              # App Django: autenticación y perfiles de usuario
-│   ├── models.py          # UserProfile (API keys cifradas, proveedor IA)
-│   └── views.py           # Login, registro, configuración
+├── accounts/              # App Django: autenticación y gestión de usuarios
+│   ├── models.py          # CustomUser, perfil y gestión de acceso
+│   ├── views.py           # Login, registro, aprobación de cuentas
+│   ├── forms.py           # Formularios de registro y configuración
+│   ├── middleware.py      # Control de acceso por estado de cuenta
+│   ├── templates/         # Templates: login, registro, emails de notificación
+│   └── migrations/
 ├── config/                # Configuración central de Django
-│   ├── settings.py        # Settings de Django
+│   ├── settings.py        # Settings (DB, i18n, email, IA, Vina)
 │   ├── urls.py            # URLs raíz
-│   ├── celery.py          # Configuración de Celery
-│   └── asgi.py            # ASGI para WebSockets (Channels)
-├── core/                  # App Django: lógica principal
-│   ├── models.py          # DockingJob, resultados
-│   ├── tasks.py           # Tasks de Celery (docking asíncrono)
-│   ├── consumers.py       # WebSocket consumers (Django Channels)
+│   ├── wsgi.py
+│   └── asgi.py
+├── core/                  # App Django: lógica de negocio principal
+│   ├── models.py          # Experimentos, resultados de docking
+│   ├── views.py           # API endpoints (docking, chat, resultados)
+│   ├── urls.py
+│   ├── data/
+│   │   ├── drugs/         # Base de datos de fármacos (xlsx)
+│   │   └── genes/         # Base de datos de genes y estructuras (xlsx)
 │   └── services/
-│       ├── ai_provider.py # Abstracción multi-proveedor IA
-│       ├── vina_service.py# Integración con AutoDock Vina
-│       └── docker_runner.py # Docker-por-job runner
+│       ├── vina_service.py          # Integración con AutoDock Vina (Docker)
+│       ├── query_handler.py         # Procesamiento de queries de chat con IA
+│       ├── molecular_utils.py       # Utilidades de preprocesado molecular
+│       └── visualizer_file_manager.py # Gestión de ficheros para el visualizador 3D
 ├── frontend/              # App Django: templates + TypeScript
-│   ├── src/               # Código fuente TypeScript
+│   ├── src/               # Código fuente TypeScript (compilado con Vite)
 │   │   ├── main.ts        # Punto de entrada
 │   │   ├── chat.ts        # Módulo de chat con IA
 │   │   ├── docking.ts     # Módulo de docking
 │   │   ├── event_bus.ts   # Bus de eventos tipado
 │   │   └── types/         # Interfaces TypeScript
-│   ├── dist/              # Build generado (no versionado)
-│   └── templates/         # Templates Django del frontend
+│   ├── static/frontend/
+│   │   ├── js/            # Módulos JS (config, chat, docking, navigation…)
+│   │   ├── css/           # Estilos compilados
+│   │   └── img/           # Imágenes y logos de instituciones
+│   └── templates/frontend/
+│       ├── index.html     # Interfaz principal (chat + docking)
+│       └── 3Dvizualiser.html # Visualizador 3D embebido
+├── input/                 # Estructuras de receptores (PDB) y ligandos (SDF) de muestra
+├── locale/                # Traducciones i18n (EN/ES)
+├── docs/                  # Screenshots y documentación visual
 ├── .env.example           # Plantilla de variables de entorno
 ├── .gitignore
 ├── CONTRIBUTING.md
-├── LICENSE
 ├── ROADMAP.md             # Plan de desarrollo por fases
 ├── docker-compose.yml
 ├── Dockerfile
+├── nginx.conf
+├── gunicorn.conf.py
 └── requirements.txt
 ```
 
@@ -216,10 +243,11 @@ RePo-SUDOE-AI is a web platform for performing **molecular docking** (protein-li
 
 Developed as a Final Degree Project (TFG) within the SUDOE project framework, the system allows researchers and students to:
 
-- Upload receptor (protein) and ligand files in `.pdbqt` format
+- Upload receptor (protein) and ligand files in `.pdbqt` / `.pdb` / `.sdf` format
 - Run molecular docking simulations using AutoDock Vina (containerized in Docker)
 - Query results via AI chat assistant (OpenAI, Anthropic, Google, or local Ollama)
 - Visualize molecular structures in 3D directly in the browser
+- Explore a built-in database of anticancer drugs and gene targets
 
 ### Quick Start
 
