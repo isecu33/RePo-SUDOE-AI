@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Solicitud de Registro - RePo-SUDOE-AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        .header {
+            background: linear-gradient(135deg, #eb5e0d 0%, #ff8c42 100%);
+            color: white;
+            padding: 30px 25px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0 0 8px 0;
+            font-size: 26px;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.95;
+        }
+        .content {
+            padding: 30px 25px;
+        }
+        .intro {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #eb5e0d;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #eb5e0d;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .info-grid {
+            display: grid;
+            gap: 12px;
+        }
+        .info-item {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            border-radius: 6px;
+            border-left: 3px solid #eb5e0d;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .info-value {
+            color: #333;
+            font-size: 15px;
+            word-wrap: break-word;
+        }
+        .info-value.multiline {
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+        .highlight-box {
+            background: #fff8f0;
+            border: 2px solid #ff8c42;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .highlight-box strong {
+            color: #eb5e0d;
+            font-size: 16px;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px 25px;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+        .timestamp {
+            color: #999;
+            font-size: 12px;
+            font-style: italic;
+            margin-top: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🔔 Nueva Solicitud de Registro</h1>
+            <p>RePo-SUDOE-AI - Panel de Administración</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <p class="intro">
+                Hola Iker,<br><br>
+                Se ha recibido una nueva solicitud de registro en la plataforma RePo-SUDOE-AI. A continuación encontrarás todos los detalles del solicitante:
+            </p>
+
+            <!-- Personal Information -->
+            <div class="section">
+                <div class="section-title">
+                    👤 Información Personal
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Nombre Completo</div>
+                        <div class="info-value">{{ access_request.user.first_name }} {{ access_request.user.last_name }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Correo Electrónico</div>
+                        <div class="info-value">{{ access_request.user.email }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Institution Information -->
+            <div class="section">
+                <div class="section-title">
+                    🏛️ Información Institucional
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Institución/Organización</div>
+                        <div class="info-value">{{ access_request.user.institution|default:"No especificado" }}</div>
+                    </div>
+                    {% if access_request.user.department %}
+                    <div class="info-item">
+                        <div class="info-label">Departamento</div>
+                        <div class="info-value">{{ access_request.user.department }}</div>
+                    </div>
+                    {% endif %}
+                    {% if access_request.user.orcid_id %}
+                    <div class="info-item">
+                        <div class="info-label">ORCID ID</div>
+                        <div class="info-value">{{ access_request.user.orcid_id }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Access Request Details -->
+            <div class="section">
+                <div class="section-title">
+                    📋 Detalles de la Solicitud
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Propósito de Investigación</div>
+                        <div class="info-value">{{ access_request.get_purpose_display }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Descripción del Proyecto</div>
+                        <div class="info-value multiline">{{ access_request.project_description }}</div>
+                    </div>
+                    {% if access_request.expected_usage %}
+                    <div class="info-item">
+                        <div class="info-label">Patrón de Uso Esperado</div>
+                        <div class="info-value multiline">{{ access_request.expected_usage }}</div>
+                    </div>
+                    {% endif %}
+                    {% if access_request.supervisor_email %}
+                    <div class="info-item">
+                        <div class="info-label">Email del Supervisor/PI</div>
+                        <div class="info-value">{{ access_request.supervisor_email }}</div>
+                    </div>
+                    {% endif %}
+                    {% if access_request.institutional_verification %}
+                    <div class="info-item">
+                        <div class="info-label">Verificación Institucional</div>
+                        <div class="info-value multiline">{{ access_request.institutional_verification }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>📧 Este correo es solo informativo</strong><br>
+                <span style="font-size: 13px; color: #666;">Revisa los datos y ponte en contacto con el solicitante si es necesario.</span>
+            </div>
+
+            <p class="timestamp">
+                📅 Solicitud recibida el {{ access_request.created_at|date:"d/m/Y" }} a las {{ access_request.created_at|time:"H:i" }}
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>RePo-SUDOE-AI</strong></p>
+            <p>Advanced Molecular Docking Platform</p>
+            <p style="margin-top: 10px;">© 2026 - Este es un mensaje automático, por favor no responder.</p>
+        </div>
+    </div>
+</body>
+</html>

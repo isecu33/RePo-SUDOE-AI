@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Access Request - RePo-SUDOE-AI</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #eb5e0d 0%, #ff8c42 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+            margin: -30px -30px 30px -30px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .info-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .info-section h3 {
+            margin-top: 0;
+            color: #eb5e0d;
+        }
+        .info-row {
+            margin: 10px 0;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #eb5e0d 0%, #ff8c42 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔔 New Access Request</h1>
+            <p>RePo-SUDOE-AI Admin Notification</p>
+        </div>
+
+        <div class="content">
+            <p>A new user has requested access to RePo-SUDOE-AI. Please review the details below:</p>
+
+            <div class="info-section">
+                <h3>User Information</h3>
+                <div class="info-row">
+                    <span class="info-label">Name:</span> {{ access_request.user.get_full_name }}
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email:</span> {{ access_request.user.email }}
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Institution:</span> {{ access_request.user.institution }}
+                </div>
+                {% if access_request.user.department %}
+                <div class="info-row">
+                    <span class="info-label">Department:</span> {{ access_request.user.department }}
+                </div>
+                {% endif %}
+                {% if access_request.user.orcid_id %}
+                <div class="info-row">
+                    <span class="info-label">ORCID ID:</span> {{ access_request.user.orcid_id }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="info-section">
+                <h3>Access Request Details</h3>
+                <div class="info-row">
+                    <span class="info-label">Purpose:</span> {{ access_request.get_purpose_display }}
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Project Description:</span><br>
+                    {{ access_request.project_description }}
+                </div>
+                {% if access_request.expected_usage %}
+                <div class="info-row">
+                    <span class="info-label">Expected Usage:</span><br>
+                    {{ access_request.expected_usage }}
+                </div>
+                {% endif %}
+                {% if access_request.supervisor_email %}
+                <div class="info-row">
+                    <span class="info-label">Supervisor Email:</span> {{ access_request.supervisor_email }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div style="text-align: center;">
+                <a href="{{ review_url }}" class="button">Review Access Request</a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 RePo-SUDOE-AI - Advanced Molecular Docking Platform</p>
+            <p>This is an automated admin notification.</p>
+        </div>
+    </div>
+</body>
+</html>

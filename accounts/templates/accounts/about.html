@@ -1,0 +1,600 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "About Us" %} - RePo-SUDOE-AI</title>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="language" content="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header Banner */
+        .header-banner {
+            background: linear-gradient(135deg, #eb5e0d 0%, #ff8c42 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .banner-left-about {
+            position: absolute;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1.2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .banner-right-about {
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .language-switcher button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.4rem 0.8rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .language-switcher button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .language-switcher button.active {
+            background: white;
+            color: #eb5e0d;
+        }
+
+        .header-banner h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .header-banner p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            font-weight: 300;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Mission Section */
+        .mission-section {
+            padding: 6rem 0;
+            background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+        }
+
+        .mission-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .mission-text h2 {
+            color: #eb5e0d;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .mission-text p {
+            color: #5a6c7d;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-image {
+            background: #e8ecef;
+            border-radius: 16px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 1.2rem;
+            border: 2px dashed #ccc;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mission-image i {
+            font-size: 5rem;
+            opacity: 0.3;
+        }
+
+        .placeholder-text {
+            position: absolute;
+            font-size: 1rem;
+            color: #999;
+        }
+
+        /* Team Section */
+        .team-section {
+            padding: 6rem 0;
+            background: #f8f9fa;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            color: #eb5e0d;
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .section-header p {
+            color: #6c757d;
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(235, 94, 13, 0.15);
+        }
+
+        .team-photo {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #e8ecef 0%, #f8f9fa 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 4px solid #eb5e0d;
+            position: relative;
+        }
+
+        .team-photo i {
+            font-size: 6rem;
+            color: #ccc;
+        }
+
+        .team-info {
+            padding: 2rem;
+        }
+
+        .team-info h3 {
+            color: #eb5e0d;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-info .role {
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .team-info .bio {
+            color: #5a6c7d;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .team-info .institution {
+            color: #eb5e0d;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Project Info Section */
+        .project-section {
+            padding: 6rem 0;
+            background: white;
+        }
+
+        .project-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .project-image {
+            background: #e8ecef;
+            border-radius: 16px;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 1.2rem;
+            border: 2px dashed #ccc;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-text h2 {
+            color: #eb5e0d;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-text p {
+            color: #5a6c7d;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .project-text ul {
+            margin-top: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .project-text li {
+            color: #5a6c7d;
+            margin-bottom: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .project-text li::marker {
+            color: #eb5e0d;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #f8f9fa;
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 3px solid #eb5e0d;
+        }
+
+        .footer-logos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .footer-logo {
+            max-width: 120px;
+            height: auto;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .footer-logo:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 968px) {
+            .mission-content,
+            .project-content {
+                grid-template-columns: 1fr;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-banner {
+                padding: 1.5rem;
+            }
+
+            .header-banner h1 {
+                font-size: 2.2rem;
+                margin-top: 3rem;
+            }
+
+            .banner-left-about {
+                position: static;
+                transform: none;
+                margin-bottom: 1rem;
+            }
+
+            .banner-right-about {
+                position: static;
+                transform: none;
+                margin-top: 1rem;
+            }
+
+            .mission-text h2,
+            .project-text h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Banner -->
+    <section class="header-banner">
+        <div class="banner-left-about">
+            <a href="{% url 'accounts:login' %}" class="btn-back">
+                <i class="fas fa-arrow-left"></i> {% trans "Back to Login" %}
+            </a>
+        </div>
+        <div>
+            <h1><i class="fas fa-users"></i> {% trans "About RePo-SUDOE-AI" %}</h1>
+            <p>{% trans "Advancing molecular docking research through innovation and collaboration" %}</p>
+        </div>
+        <div class="banner-right-about">
+            <div class="language-switcher">
+                <form id="language-form" method="post" action="{% url 'set_language' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    <input type="hidden" name="language" id="language-input" value="">
+                    <button type="button" id="lang-en" class="{% if LANGUAGE_CODE == 'en' %}active{% endif %}">EN</button>
+                    <button type="button" id="lang-es" class="{% if LANGUAGE_CODE == 'es' %}active{% endif %}">ES</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="mission-section" style="padding: 4rem 0;">
+        <div class="container">
+            <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+                <h2 style="color: #eb5e0d; font-size: 2.5rem; font-weight: 800; margin-bottom: 2rem;">{% trans "Our Mission" %}</h2>
+                <p style="color: #5a6c7d; font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.2rem;">
+                    {% trans "RePo-SUDOE-AI is dedicated to democratizing access to cutting-edge computational chemistry tools. We believe that advanced molecular docking simulations should be accessible to researchers at all levels, from undergraduate students to leading scientists in pharmaceutical companies." %}
+                </p>
+                <p style="color: #5a6c7d; font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.2rem;">
+                    {% trans "Our platform combines state-of-the-art algorithms with an intuitive user interface, making complex molecular interactions understandable and actionable. We are committed to accelerating drug discovery research across Europe and beyond." %}
+                </p>
+                <p style="color: #5a6c7d; font-size: 1.1rem; line-height: 1.8; margin-bottom: 0;">
+                    {% trans "Through continuous innovation and collaboration with leading research institutions, we strive to provide the most advanced, reliable, and user-friendly molecular docking platform available." %}
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>{% trans "Meet Our Team" %}</h2>
+                <p>{% trans "Building the future of accessible molecular docking" %}</p>
+            </div>
+
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-photo">
+                        <img src="{% static 'frontend/img/iker.png' %}" alt="Iker Seoane Currás" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="team-info">
+                        <h3>Iker Seoane Currás</h3>
+                        <p class="role">{% trans "Platform Developer & Researcher" %}</p>
+                        <p class="bio">
+                            {% trans "Iker is the lead developer of the RePo-SUDOE-AI platform, working on his thesis to create an accessible and intuitive molecular docking tool. He combines expertise in software engineering with a passion for computational chemistry, building upon frameworks like webina to create innovative solutions for drug discovery research." %}
+                        </p>
+                        <p class="institution">
+                            <i class="fas fa-university"></i>
+                            {% trans "University of A Coruña" %}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-photo">
+                        <img src="{% static 'frontend/img/carlos-no-background.png' %}" alt="Carlos Fernández Lozano" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="team-info">
+                        <h3>Carlos Fernández Lozano</h3>
+                        <p class="role">{% trans "Thesis Director & Scientific Advisor" %}</p>
+                        <p class="bio">
+                            {% trans "Carlos provides scientific guidance and expertise in computational biology and bioinformatics. As thesis director, he oversees the development of the platform, ensuring it meets the highest standards of scientific rigor while remaining accessible to researchers. His experience in machine learning and data analysis shapes the strategic direction of the project." %}
+                        </p>
+                        <p class="institution">
+                            <i class="fas fa-university"></i>
+                            {% trans "CITIC Research Center, University of A Coruña" %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Context Section -->
+    <section class="project-section" style="background: white;">
+        <div class="container">
+            <div class="project-content">
+                <div class="project-text">
+                    <h2>{% trans "Platform Foundation" %}</h2>
+                    <p>
+                        {% trans "The RePo-SUDOE-AI platform is another step forward in advancing scientific knowledge and promoting the use of new technologies for drug repurposing in the SUDOE region. By applying available previous knowledge, we developed a system that allows users to run molecular docking experiments simply by using natural language, and to visualize therapeutic targets and their interactions with drugs in a 3D format. This interactive and educational approach is designed to motivate young students and researchers in STEAM fields." %}
+                    </p>
+                    <p>
+                        {% trans "The platform has an easy-to-use interface that lets users perform molecular docking experiments and view the results in interactive 3D directly from their browser, making complex methods easier to use for both researchers and students." %}
+                    </p>
+                    <p>
+                        {% trans "One of our main goals is to develop and share advanced technologies for drug repurposing, making this innovation accessible to everyone. In addition, the prototype aims to serve as a starting point for a new educational model in the SUDOE region, helping less developed areas and addressing population challenges." %}
+                    </p>
+                </div>
+                <div class="project-image" style="background: none; border: none; height: auto;">
+                    <img src="{% static 'frontend/img/output.png' %}" alt="Molecular Docking Visualization" style="width: 100%; height: auto; object-fit: contain; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Info Section -->
+    <section class="project-section" style="background: #f8f9fa; padding: 4rem 0;">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <h2 style="color: #eb5e0d; font-size: 2.8rem; font-weight: 800; margin-bottom: 1rem;">{% trans "About the RePo-SUDOE Project" %}</h2>
+                <p style="color: #6c757d; font-size: 1.2rem; max-width: 800px; margin: 0 auto;">
+                    {% trans "Drug Repurposing for Effective and Accelerated Drug Development in the SUDOE Space" %}
+                </p>
+            </div>
+
+            <div class="project-content" style="grid-template-columns: 1fr; gap: 3rem; max-width: 900px; margin: 0 auto;">
+                <div style="background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);">
+                    <h3 style="color: #eb5e0d; font-size: 1.8rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem;">
+                        <i class="fas fa-bullseye"></i> {% trans "The Challenge" %}
+                    </h3>
+                    <p style="color: #5a6c7d; font-size: 1.1rem; line-height: 1.8; margin: 0;">
+                        {% trans "The pharmaceutical development process often faces high failure rates, costs, and delays. This highlights the importance of drug repurposing, which finds new therapeutic uses for existing market drugs, benefiting the pharmaceutical industry, society, and patients alike." %}
+                    </p>
+                </div>
+
+                <div style="background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);">
+                    <h3 style="color: #eb5e0d; font-size: 1.8rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem;">
+                        <i class="fas fa-rocket"></i> {% trans "Our Goal" %}
+                    </h3>
+                    <p style="color: #5a6c7d; font-size: 1.1rem; line-height: 1.8; margin: 0;">
+                        {% trans "The RePo-SUDOE project aims to develop and disseminate drug repurposing technologies to enhance the competitiveness of the SUDOE region in this R&D area, boosting the biopharmaceutical industry and attracting skilled human resources." %}
+                    </p>
+                </div>
+
+                <div style="background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);">
+                    <h3 style="color: #eb5e0d; font-size: 1.8rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem;">
+                        <i class="fas fa-flag-checkered"></i> {% trans "Key Objectives" %}
+                    </h3>
+                    <ul style="color: #5a6c7d; font-size: 1.05rem; line-height: 1.8; margin: 0; padding-left: 1.5rem;">
+                        <li style="margin-bottom: 1rem;">
+                            {% trans "Advance scientific knowledge and disseminate drug repurposing technologies among public and private agents, elevating SUDOE's R&D groups to European excellence." %}
+                        </li>
+                        <li style="margin-bottom: 1rem;">
+                            {% trans "Foster multidisciplinary collaboration and identify innovative opportunities in SUDOE through a transnational network, developing a database of therapeutic targets and drugs, with a primary focus on cancer treatment." %}
+                        </li>
+                        <li style="margin-bottom: 0;">
+                            {% trans "Create a prototype 3D visualization room for biological systems, utilizing VR and AR, aimed at young students and researchers in STEAM fields." %}
+                        </li>
+                    </ul>
+                </div>
+
+                <div style="background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);">
+                    <h3 style="color: #eb5e0d; font-size: 1.8rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem;">
+                        <i class="fas fa-globe-europe"></i> {% trans "Regional Impact" %}
+                    </h3>
+                    <p style="color: #5a6c7d; font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
+                        {% trans "RePo-SUDOE unites partners from different SUDOE regions and sectors within the pharmaceutical development value chain. It provides easily accessible scientific information and visualization technologies to strengthen drug repurposing within the SUDOE space." %}
+                    </p>
+                    <p style="color: #5a6c7d; font-size: 1.1rem; line-height: 1.8; margin: 0;">
+                        {% trans "The project addresses demographic challenges of aging and depopulation, enhancing regional R&D competitiveness and bridging territorial disparities. By aligning with regional RIS3 strategies, RePo-SUDOE fosters innovation and sustainable employment growth, particularly in regions with traditionally low R&D intensity." %}
+                    </p>
+                </div>
+
+                <div style="text-align: center; padding: 2rem; background: linear-gradient(135deg, #eb5e0d 0%, #ff8c42 100%); border-radius: 16px;">
+                    <p style="color: white; font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem;">
+                        {% trans "Learn more about the INTERREG SUDOE initiative" %}
+                    </p>
+                    <a href="https://interreg-sudoe.eu/proyecto-interreg/repo-sudoe/" target="_blank"
+                       style="display: inline-block; background: white; color: #eb5e0d; padding: 0.8rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: transform 0.3s ease;">
+                        <i class="fas fa-external-link-alt"></i> {% trans "Visit Project Website" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-logos">
+            <img src="{% static 'frontend/img/cbmn-logo.png' %}" alt="CBMN Logo" class="footer-logo">
+            <img src="{% static 'frontend/img/citic-logo.png' %}" alt="CITIC Logo" class="footer-logo">
+            <img src="{% static 'frontend/img/cnrs-logo.png' %}" alt="CNRS Logo" class="footer-logo">
+            <img src="{% static 'frontend/img/csg-logo.png' %}" alt="CSG Logo" class="footer-logo">
+            <img src="{% static 'frontend/img/interreg_sudoe-logo.png' %}" alt="Interreg Sudoe Logo" class="footer-logo">
+            <img src="{% static 'frontend/img/mduse-logo.png' %}" alt="MDUSE Logo" class="footer-logo">
+            <img src="{% static 'frontend/img/spsp-logo.png' %}" alt="SPSP Logo" class="footer-logo">
+            <img src="{% static 'frontend/img/udc-logo.png' %}" alt="UDC Logo" class="footer-logo">
+            <img src="{% static 'frontend/img/usc-logo.png' %}" alt="USC Logo" class="footer-logo">
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Language switcher functionality using Django i18n
+            const langEn = document.getElementById('lang-en');
+            const langEs = document.getElementById('lang-es');
+            const languageForm = document.getElementById('language-form');
+            const languageInput = document.getElementById('language-input');
+
+            langEn.addEventListener('click', function() {
+                languageInput.value = 'en';
+                languageForm.submit();
+            });
+
+            langEs.addEventListener('click', function() {
+                languageInput.value = 'es';
+                languageForm.submit();
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Request - RePo-SUDOE-AI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f6fa;
+        }
+        .navbar-custom {
+            background: linear-gradient(135deg, #eb5e0d 0%, #ff8c42 100%);
+        }
+        .info-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .section-title {
+            color: #eb5e0d;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #eb5e0d;
+        }
+        .info-row {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .info-value {
+            color: #333;
+        }
+        .btn-approve {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+        }
+        .btn-approve:hover {
+            background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
+            color: white;
+        }
+        .btn-reject {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            border: none;
+        }
+        .btn-reject:hover {
+            background: linear-gradient(135deg, #c82333 0%, #dc3545 100%);
+            color: white;
+        }
+        .action-section {
+            background: #fff8f0;
+            border: 2px solid #ff8c42;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark navbar-custom mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'accounts:admin_dashboard' %}">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-white">
+                    <i class="fas fa-user-shield"></i> {{ request.user.get_full_name }}
+                </span>
+                <a href="{% url 'accounts:logout' %}" class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="mb-4"><i class="fas fa-clipboard-check"></i> Review Access Request</h1>
+
+        <!-- User Information -->
+        <div class="info-card">
+            <h3 class="section-title"><i class="fas fa-user"></i> User Information</h3>
+
+            <div class="info-row">
+                <div class="info-label"><i class="fas fa-id-card"></i> Full Name</div>
+                <div class="info-value">{{ access_request.user.get_full_name }}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label"><i class="fas fa-envelope"></i> Email Address</div>
+                <div class="info-value">{{ access_request.user.email }}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label"><i class="fas fa-university"></i> Institution/Organization</div>
+                <div class="info-value">{{ access_request.user.institution|default:"Not specified" }}</div>
+            </div>
+
+            {% if access_request.user.department %}
+            <div class="info-row">
+                <div class="info-label"><i class="fas fa-sitemap"></i> Department</div>
+                <div class="info-value">{{ access_request.user.department }}</div>
+            </div>
+            {% endif %}
+
+            {% if access_request.user.orcid_id %}
+            <div class="info-row">
+                <div class="info-label"><i class="fas fa-fingerprint"></i> ORCID ID</div>
+                <div class="info-value">{{ access_request.user.orcid_id }}</div>
+            </div>
+            {% endif %}
+
+            <div class="info-row">
+                <div class="info-label"><i class="fas fa-calendar"></i> Account Created</div>
+                <div class="info-value">{{ access_request.user.created_at|date:"d/m/Y H:i" }}</div>
+            </div>
+        </div>
+
+        <!-- Access Request Details -->
+        <div class="info-card">
+            <h3 class="section-title"><i class="fas fa-clipboard-list"></i> Access Request Details</h3>
+
+            <div class="info-row">
+                <div class="info-label"><i class="fas fa-bullseye"></i> Research Purpose</div>
+                <div class="info-value">{{ access_request.get_purpose_display }}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label"><i class="fas fa-file-alt"></i> Project Description</div>
+                <div class="info-value">{{ access_request.project_description }}</div>
+            </div>
+
+            {% if access_request.expected_usage %}
+            <div class="info-row">
+                <div class="info-label"><i class="fas fa-chart-line"></i> Expected Usage Pattern</div>
+                <div class="info-value">{{ access_request.expected_usage }}</div>
+            </div>
+            {% endif %}
+
+            {% if access_request.supervisor_email %}
+            <div class="info-row">
+                <div class="info-label"><i class="fas fa-user-tie"></i> Supervisor/PI Email</div>
+                <div class="info-value">{{ access_request.supervisor_email }}</div>
+            </div>
+            {% endif %}
+
+            {% if access_request.institutional_verification %}
+            <div class="info-row">
+                <div class="info-label"><i class="fas fa-check-circle"></i> Institutional Verification</div>
+                <div class="info-value">{{ access_request.institutional_verification }}</div>
+            </div>
+            {% endif %}
+
+            <div class="info-row">
+                <div class="info-label"><i class="fas fa-clock"></i> Request Date</div>
+                <div class="info-value">{{ access_request.created_at|date:"d/m/Y H:i" }}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label"><i class="fas fa-flag"></i> Current Status</div>
+                <div class="info-value">
+                    {% if access_request.status == 'pending' %}
+                        <span class="badge bg-warning text-dark">Pending Review</span>
+                    {% elif access_request.status == 'approved' %}
+                        <span class="badge bg-success">Approved</span>
+                    {% elif access_request.status == 'rejected' %}
+                        <span class="badge bg-danger">Rejected</span>
+                    {% elif access_request.status == 'more_info' %}
+                        <span class="badge bg-info">More Info Required</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if access_request.reviewed_by %}
+            <div class="info-row">
+                <div class="info-label"><i class="fas fa-user-check"></i> Reviewed By</div>
+                <div class="info-value">{{ access_request.reviewed_by.get_full_name }} on {{ access_request.reviewed_at|date:"d/m/Y H:i" }}</div>
+            </div>
+            {% endif %}
+
+            {% if access_request.admin_notes %}
+            <div class="info-row">
+                <div class="info-label"><i class="fas fa-sticky-note"></i> Admin Notes</div>
+                <div class="info-value">{{ access_request.admin_notes }}</div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Action Section -->
+        {% if access_request.status == 'pending' %}
+        <div class="action-section">
+            <h3 class="section-title"><i class="fas fa-gavel"></i> Review Decision</h3>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label"><strong>Admin Notes (optional for approval, required for rejection):</strong></label>
+                    <textarea name="admin_notes" class="form-control" rows="4" placeholder="Enter any notes or reasons for your decision..."></textarea>
+                </div>
+
+                <div class="d-flex gap-3">
+                    <button type="submit" name="action" value="approve" class="btn btn-approve btn-lg">
+                        <i class="fas fa-check"></i> Approve Request
+                    </button>
+                    <button type="submit" name="action" value="reject" class="btn btn-reject btn-lg">
+                        <i class="fas fa-times"></i> Reject Request
+                    </button>
+                    <button type="submit" name="action" value="request_more_info" class="btn btn-warning btn-lg">
+                        <i class="fas fa-question"></i> Request More Info
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> This request has already been reviewed and {{ access_request.get_status_display|lower }}.
+        </div>
+        {% endif %}
+
+        <div class="mt-4 mb-5">
+            <a href="{% url 'accounts:admin_dashboard' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

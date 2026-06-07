@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}RePo-SUDOE-AI{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/3Dmol/1.8.0/3Dmol-min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #eb5e0d 0%, #ff8c42 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .auth-container {
+            max-width: 680px; /* widened form per request */
+            margin: 2rem auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            z-index: 999; /* ensure form sits above any background layers */
+            pointer-events: auto; /* ensure inputs are interactive */
+        }
+        .auth-header {
+            background: linear-gradient(135deg, #eb5e0d 0%, #ff8c42 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .auth-body {
+            padding: 2rem;
+        }
+        .form-control:focus {
+            border-color: #eb5e0d;
+            box-shadow: 0 0 0 0.2rem rgba(235, 94, 13, 0.25);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #eb5e0d 0%, #ff8c42 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(235, 94, 13, 0.4);
+        }
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+        .brand-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        .auth-links {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .auth-links a {
+            color: #eb5e0d;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .auth-links a:hover {
+            color: #ff8c42;
+        }
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #dee2e6;
+        }
+        .divider span {
+            position: relative;
+            background: rgba(255, 255, 255, 1);
+            padding: 0 1rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .auth-body {
+            pointer-events: auto; /* ensure form elements receive pointer events */
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        <!-- Message alerts have been removed for a cleaner registration UI. -->
+
+        <div class="auth-container">
+            <div class="auth-header">
+                <div class="brand-logo">
+                    {% load static %}
+                    <img src="{% static 'frontend/img/logo-repo-sudoe-ai-nobackground.png' %}" alt="RePo-SUDOE-AI Logo" style="height: 80px; margin-bottom: 0.5rem;">
+                </div>
+                <p class="mb-0">{% block header_subtitle %}Molecular Docking Platform{% endblock %}</p>
+            </div>
+            <div class="auth-body">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Dev auto-reload: polls the server for template/project changes and reloads the page when detected. -->
+    <script>
+    (function(){
+        const POLL_INTERVAL = 1200; // ms
+        let lastTs = null;
+        async function check() {
+            try {
+                const res = await fetch('{% url "accounts:dev_reload" %}');
+                if (!res.ok) return;
+                const data = await res.json();
+                if (!data.ts) return;
+                if (lastTs && data.ts > lastTs) {
+                    console.log('Change detected, reloading page...');
+                    location.reload(true);
+                }
+                lastTs = data.ts;
+            } catch (e) {
+                // ignore errors (endpoint may be disabled in production)
+            }
+        }
+        // Start polling only in development
+        setInterval(check, POLL_INTERVAL);
+        // initial check
+        check();
+    })();
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

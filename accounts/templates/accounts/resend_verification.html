@@ -1,0 +1,32 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Resend Verification - RePo-SUDOE-AI{% endblock %}
+
+{% block header_subtitle %}Resend Email Verification{% endblock %}
+
+{% block content %}
+<form method="post" novalidate>
+    {% csrf_token %}
+    
+    <div class="mb-3">
+        <label for="email" class="form-label">
+            <i class="fas fa-envelope me-2"></i>Email Address
+        </label>
+        <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+
+    <div class="d-grid mb-3">
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-paper-plane me-2"></i>Resend Verification Email
+        </button>
+    </div>
+
+    <div class="auth-links">
+        <p class="mb-0">
+            <a href="{% url 'accounts:login' %}">
+                <i class="fas fa-arrow-left me-1"></i>Back to Login
+            </a>
+        </p>
+    </div>
+</form>
+{% endblock %}

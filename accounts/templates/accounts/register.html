@@ -1,0 +1,786 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - RePo-SUDOE-AI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/3Dmol/1.8.0/3Dmol-min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #0a0e27;
+        }
+
+        /* Welcome Banner Section */
+        .welcome-banner {
+            background: linear-gradient(135deg, #eb5e0d 0%, #ff8c42 100%);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .banner-left {
+            position: absolute;
+            left: 2rem;
+        }
+
+        .btn-about {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1.2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-about:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .banner-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1.125rem;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .banner-logo {
+            height: 60px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .banner-text {
+            text-align: left;
+        }
+
+        .banner-text h1 {
+            font-size: 1.875rem;
+            font-weight: 800;
+            margin-bottom: 0.375rem;
+            letter-spacing: -0.5px;
+        }
+
+        .banner-text p {
+            font-size: 0.825rem;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .banner-right {
+            position: absolute;
+            right: 2rem;
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .language-switcher button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.4rem 0.8rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .language-switcher button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .language-switcher button.active {
+            background: white;
+            color: #2c3e50;
+        }
+
+        /* Main Content Section */
+        .main-section {
+            flex: 1;
+            background: #0a0e27;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .register-form-container {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+            max-width: 700px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .register-form-container h2 {
+            color: #eb5e0d;
+            margin-bottom: 0.3rem;
+            font-size: 1.75rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .register-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+            line-height: 1.3;
+        }
+
+        .section-title {
+            color: #eb5e0d;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e8ecef;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.85rem;
+            letter-spacing: 0.2px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            border: 2px solid #e8ecef;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #eb5e0d;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(235, 94, 13, 0.1);
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 0.25rem;
+            color: #6c757d;
+            font-size: 0.75rem;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, #eb5e0d 0%, #ff8c42 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(235, 94, 13, 0.3);
+            letter-spacing: 0.3px;
+            margin-top: 1.5rem;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(235, 94, 13, 0.4);
+            background: linear-gradient(135deg, #ff8c42 0%, #eb5e0d 100%);
+        }
+
+        .btn-register:active {
+            transform: translateY(0);
+        }
+
+        .form-links {
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .form-links a {
+            color: #eb5e0d;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .form-links a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .text-danger {
+            color: #dc3545;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .text-success {
+            color: #28a745;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #f8f9fa;
+            padding: 1.125rem 0;
+            text-align: center;
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .footer-logos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 1.125rem;
+        }
+
+        .footer-logo {
+            max-width: 75px;
+            height: auto;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .footer-logo:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .welcome-banner {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem;
+                gap: 1rem;
+            }
+
+            .banner-left {
+                position: static;
+                order: 1;
+            }
+
+            .banner-content {
+                order: 2;
+                flex-direction: column;
+            }
+
+            .banner-text {
+                text-align: center;
+            }
+
+            .banner-text h1 {
+                font-size: 1.8rem;
+            }
+
+            .banner-text p {
+                font-size: 0.95rem;
+            }
+
+            .banner-logo {
+                height: 65px;
+            }
+
+            .banner-right {
+                position: static;
+                order: 3;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .register-form-container {
+                padding: 1.5rem;
+            }
+
+            .register-form-container h2 {
+                font-size: 1.5rem;
+            }
+
+            .footer-logo {
+                max-width: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .register-form-container {
+                padding: 1.25rem;
+            }
+
+            .btn-register {
+                padding: 0.8rem;
+                font-size: 0.95rem;
+            }
+
+            .footer-logos {
+                gap: 0.75rem;
+            }
+
+            .footer-logo {
+                max-width: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Banner -->
+    <section class="welcome-banner">
+        <div class="banner-left">
+            <a href="{% url 'accounts:about' %}" class="btn-about"><span class="text-en">About</span><span class="text-es" style="display: none;">Acerca de</span></a>
+        </div>
+        <div class="banner-content">
+            <img src="{% static 'frontend/img/pure-logo-repo-sudoe-ai.png' %}" alt="RePo-SUDOE-AI Logo" class="banner-logo">
+            <div class="banner-text">
+                <h1>RePo-SUDOE-AI</h1>
+                <p><span class="text-en">Advanced Molecular Docking Platform</span><span class="text-es" style="display: none;">Plataforma Avanzada de Acoplamiento Molecular</span></p>
+            </div>
+        </div>
+        <div class="banner-right">
+            <div class="language-switcher">
+                <button id="lang-en" class="active">EN</button>
+                <button id="lang-es">ES</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Form Section -->
+    <section class="main-section">
+        <div class="register-form-container">
+            <h2><i class="fas fa-user-plus"></i> <span class="text-en">Request Account Access</span><span class="text-es" style="display: none;">Solicitar Acceso a Cuenta</span></h2>
+            <p class="register-subtitle"><span class="text-en">Fill out the form below to request access to RePo-SUDOE-AI</span><span class="text-es" style="display: none;">Complete el formulario para solicitar acceso a RePo-SUDOE-AI</span></p>
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                {% if user_form.non_field_errors or access_form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in user_form.non_field_errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                        {% for error in access_form.non_field_errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Personal Information Section -->
+                <div class="section-title">
+                    <i class="fas fa-user"></i> <span class="text-en">Personal Information</span><span class="text-es" style="display: none;">Información Personal</span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ user_form.first_name.id_for_label }}">
+                            <i class="fas fa-user"></i> <span class="text-en">First Name</span><span class="text-es" style="display: none;">Nombre</span> *
+                        </label>
+                        {{ user_form.first_name }}
+                        {% if user_form.first_name.errors %}
+                            <div class="text-danger">
+                                {% for error in user_form.first_name.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ user_form.last_name.id_for_label }}">
+                            <i class="fas fa-user"></i> <span class="text-en">Last Name</span><span class="text-es" style="display: none;">Apellido</span> *
+                        </label>
+                        {{ user_form.last_name }}
+                        {% if user_form.last_name.errors %}
+                            <div class="text-danger">
+                                {% for error in user_form.last_name.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ user_form.email.id_for_label }}">
+                        <i class="fas fa-envelope"></i> <span class="text-en">Email Address</span><span class="text-es" style="display: none;">Correo Electrónico</span> *
+                    </label>
+                    {{ user_form.email }}
+                    <div id="email-feedback"></div>
+                    {% if user_form.email.errors %}
+                        <div class="text-danger">
+                            {% for error in user_form.email.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ user_form.password1.id_for_label }}">
+                            <i class="fas fa-lock"></i> <span class="text-en">Password</span><span class="text-es" style="display: none;">Contraseña</span> *
+                        </label>
+                        {{ user_form.password1 }}
+                        {% if user_form.password1.errors %}
+                            <div class="text-danger">
+                                {% for error in user_form.password1.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ user_form.password2.id_for_label }}">
+                            <i class="fas fa-lock"></i> <span class="text-en">Confirm Password</span><span class="text-es" style="display: none;">Confirmar Contraseña</span> *
+                        </label>
+                        {{ user_form.password2 }}
+                        {% if user_form.password2.errors %}
+                            <div class="text-danger">
+                                {% for error in user_form.password2.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Institution Information Section -->
+                <div class="section-title">
+                    <i class="fas fa-building"></i> <span class="text-en">Institution Information</span><span class="text-es" style="display: none;">Información Institucional</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ user_form.institution.id_for_label }}">
+                        <i class="fas fa-university"></i> <span class="text-en">Institution/Organization</span><span class="text-es" style="display: none;">Institución/Organización</span> *
+                    </label>
+                    {{ user_form.institution }}
+                    {% if user_form.institution.errors %}
+                        <div class="text-danger">
+                            {% for error in user_form.institution.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ user_form.department.id_for_label }}">
+                        <i class="fas fa-sitemap"></i> <span class="text-en">Department</span><span class="text-es" style="display: none;">Departamento</span>
+                    </label>
+                    {{ user_form.department }}
+                    {% if user_form.department.errors %}
+                        <div class="text-danger">
+                            {% for error in user_form.department.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ user_form.orcid_id.id_for_label }}">
+                        <i class="fas fa-id-card"></i> <span class="text-en">ORCID ID</span><span class="text-es" style="display: none;">ID ORCID</span>
+                    </label>
+                    {{ user_form.orcid_id }}
+                    <small><span class="text-en">Optional (format: 0000-0000-0000-0000)</span><span class="text-es" style="display: none;">Opcional (formato: 0000-0000-0000-0000)</span></small>
+                    {% if user_form.orcid_id.errors %}
+                        <div class="text-danger">
+                            {% for error in user_form.orcid_id.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Access Request Information Section -->
+                <div class="section-title">
+                    <i class="fas fa-flask"></i> <span class="text-en">Access Request Information</span><span class="text-es" style="display: none;">Información de Solicitud de Acceso</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ access_form.purpose.id_for_label }}">
+                        <i class="fas fa-bullseye"></i> <span class="text-en">Research Purpose</span><span class="text-es" style="display: none;">Propósito de Investigación</span> *
+                    </label>
+                    {{ access_form.purpose }}
+                    {% if access_form.purpose.errors %}
+                        <div class="text-danger">
+                            {% for error in access_form.purpose.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ access_form.project_description.id_for_label }}">
+                        <i class="fas fa-align-left"></i> <span class="text-en">Project Description</span><span class="text-es" style="display: none;">Descripción del Proyecto</span> *
+                    </label>
+                    {{ access_form.project_description }}
+                    <small><span class="text-en">Describe your project, objectives, and how you plan to use RePo-SUDOE-AI</span><span class="text-es" style="display: none;">Describa su proyecto, objetivos y cómo planea usar RePo-SUDOE-AI</span></small>
+                    {% if access_form.project_description.errors %}
+                        <div class="text-danger">
+                            {% for error in access_form.project_description.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ access_form.expected_usage.id_for_label }}">
+                        <i class="fas fa-chart-line"></i> <span class="text-en">Expected Usage Pattern</span><span class="text-es" style="display: none;">Patrón de Uso Esperado</span>
+                    </label>
+                    {{ access_form.expected_usage }}
+                    <small><span class="text-en">Frequency of use, number of simulations, project duration, etc.</span><span class="text-es" style="display: none;">Frecuencia de uso, número de simulaciones, duración del proyecto, etc.</span></small>
+                    {% if access_form.expected_usage.errors %}
+                        <div class="text-danger">
+                            {% for error in access_form.expected_usage.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ access_form.supervisor_email.id_for_label }}">
+                        <i class="fas fa-user-tie"></i> <span class="text-en">Supervisor/PI Email</span><span class="text-es" style="display: none;">Email del Supervisor/IP</span>
+                    </label>
+                    {{ access_form.supervisor_email }}
+                    <small><span class="text-en">Required for academic research</span><span class="text-es" style="display: none;">Requerido para investigación académica</span></small>
+                    {% if access_form.supervisor_email.errors %}
+                        <div class="text-danger">
+                            {% for error in access_form.supervisor_email.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ access_form.institutional_verification.id_for_label }}">
+                        <i class="fas fa-check-circle"></i> <span class="text-en">Institutional Verification</span><span class="text-es" style="display: none;">Verificación Institucional</span>
+                    </label>
+                    {{ access_form.institutional_verification }}
+                    <small><span class="text-en">Optional: Additional information to verify your affiliation</span><span class="text-es" style="display: none;">Opcional: Información adicional para verificar su afiliación</span></small>
+                    {% if access_form.institutional_verification.errors %}
+                        <div class="text-danger">
+                            {% for error in access_form.institutional_verification.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn-register">
+                    <i class="fas fa-paper-plane"></i> <span class="text-en">Submit Access Request</span><span class="text-es" style="display: none;">Enviar Solicitud de Acceso</span>
+                </button>
+            </form>
+
+            <div class="form-links">
+                <p>
+                    <span class="text-en">Already have an account?</span><span class="text-es" style="display: none;">¿Ya tienes una cuenta?</span>
+                    <a href="{% url 'accounts:login' %}">
+                        <i class="fas fa-sign-in-alt"></i> <span class="text-en">Sign In</span><span class="text-es" style="display: none;">Iniciar Sesión</span>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-logos">
+            <img src="{% static 'frontend/img/cbmn-logo.png' %}" alt="CBMN Logo" class="footer-logo">
+            <img src="{% static 'frontend/img/citic-logo.png' %}" alt="CITIC Logo" class="footer-logo">
+            <img src="{% static 'frontend/img/cnrs-logo.png' %}" alt="CNRS Logo" class="footer-logo">
+            <img src="{% static 'frontend/img/csg-logo.png' %}" alt="CSG Logo" class="footer-logo">
+            <img src="{% static 'frontend/img/interreg_sudoe-logo.png' %}" alt="Interreg Sudoe Logo" class="footer-logo">
+            <img src="{% static 'frontend/img/mduse-logo.png' %}" alt="MDUSE Logo" class="footer-logo">
+            <img src="{% static 'frontend/img/spsp-logo.png' %}" alt="SPSP Logo" class="footer-logo">
+            <img src="{% static 'frontend/img/udc-logo.png' %}" alt="UDC Logo" class="footer-logo">
+            <img src="{% static 'frontend/img/usc-logo.png' %}" alt="USC Logo" class="footer-logo">
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add styling to form fields (fallback if Django doesn't add classes)
+            const formControls = document.querySelectorAll('input[type="email"], input[type="password"], input[type="text"], select, textarea');
+            formControls.forEach(function(field) {
+                if (!field.classList.contains('form-control')) {
+                    field.classList.add('form-control');
+                }
+                if (field.hasAttribute('required')) {
+                    field.setAttribute('aria-required', 'true');
+                }
+            });
+
+            // Email availability check
+            const emailField = document.getElementById('{{ user_form.email.id_for_label }}');
+            if (emailField) {
+                let timeout;
+                emailField.addEventListener('input', function() {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => checkEmailAvailability(this.value), 500);
+                });
+            }
+
+            // Language switcher functionality
+            const langEn = document.getElementById('lang-en');
+            const langEs = document.getElementById('lang-es');
+
+            function switchLanguage(lang) {
+                const enElements = document.querySelectorAll('.text-en');
+                const esElements = document.querySelectorAll('.text-es');
+
+                if (lang === 'en') {
+                    enElements.forEach(el => el.style.display = '');
+                    esElements.forEach(el => el.style.display = 'none');
+                    langEn.classList.add('active');
+                    langEs.classList.remove('active');
+                    localStorage.setItem('language', 'en');
+                } else {
+                    enElements.forEach(el => el.style.display = 'none');
+                    esElements.forEach(el => el.style.display = '');
+                    langEs.classList.add('active');
+                    langEn.classList.remove('active');
+                    localStorage.setItem('language', 'es');
+                }
+            }
+
+            langEn.addEventListener('click', () => switchLanguage('en'));
+            langEs.addEventListener('click', () => switchLanguage('es'));
+
+            // Load saved language preference
+            const savedLang = localStorage.getItem('language') || 'en';
+            switchLanguage(savedLang);
+        });
+
+        function checkEmailAvailability(email) {
+            if (email.length < 5) return;
+
+            fetch('{% url "accounts:check_email_availability" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const emailField = document.getElementById('{{ user_form.email.id_for_label }}');
+                const feedback = document.getElementById('email-feedback');
+
+                if (feedback) {
+                    feedback.innerHTML = '';
+                }
+
+                if (data.available) {
+                    feedback.className = 'text-success';
+                    feedback.innerHTML = '<i class="fas fa-check"></i> <span class="text-en">Email is available</span><span class="text-es" style="display: none;">Email disponible</span>';
+                    emailField.style.borderColor = '#28a745';
+                } else {
+                    feedback.className = 'text-danger';
+                    feedback.innerHTML = '<i class="fas fa-times"></i> <span class="text-en">Email is already registered</span><span class="text-es" style="display: none;">Email ya registrado</span>';
+                    emailField.style.borderColor = '#dc3545';
+                }
+
+                // Re-apply language settings after adding feedback
+                const savedLang = localStorage.getItem('language') || 'en';
+                const enElements = document.querySelectorAll('.text-en');
+                const esElements = document.querySelectorAll('.text-es');
+                if (savedLang === 'en') {
+                    enElements.forEach(el => el.style.display = '');
+                    esElements.forEach(el => el.style.display = 'none');
+                } else {
+                    enElements.forEach(el => el.style.display = 'none');
+                    esElements.forEach(el => el.style.display = '');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

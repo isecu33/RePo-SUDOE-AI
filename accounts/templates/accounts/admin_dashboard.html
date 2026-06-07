@@ -1,0 +1,238 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - RePo-SUDOE-AI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f6fa;
+        }
+        .navbar-custom {
+            background: linear-gradient(135deg, #eb5e0d 0%, #ff8c42 100%);
+        }
+        .stat-card {
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-card.pending {
+            background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+            color: white;
+        }
+        .stat-card.approved {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+        .stat-card.rejected {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+        .stat-card.total {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        .request-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-left: 4px solid #eb5e0d;
+        }
+        .badge-status {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .btn-review {
+            background: linear-gradient(135deg, #eb5e0d 0%, #ff8c42 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-review:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(235, 94, 13, 0.4);
+            color: white;
+        }
+        .section-title {
+            color: #eb5e0d;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #eb5e0d;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark navbar-custom mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'frontend:index' %}">
+                <i class="fas fa-flask"></i> RePo-SUDOE-AI
+            </a>
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-white">
+                    <i class="fas fa-user-shield"></i> {{ request.user.get_full_name }}
+                </span>
+                <a href="{% url 'accounts:logout' %}" class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="mb-4"><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stat-card pending">
+                    <div class="stat-number">{{ stats.pending_count }}</div>
+                    <div class="stat-label"><i class="fas fa-clock"></i> Pending Requests</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card approved">
+                    <div class="stat-number">{{ stats.approved_count }}</div>
+                    <div class="stat-label"><i class="fas fa-check"></i> Approved</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card rejected">
+                    <div class="stat-number">{{ stats.rejected_count }}</div>
+                    <div class="stat-label"><i class="fas fa-times"></i> Rejected</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card total">
+                    <div class="stat-number">{{ stats.total_users }}</div>
+                    <div class="stat-label"><i class="fas fa-users"></i> Total Users</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Requests -->
+        <div class="mb-5">
+            <h2 class="section-title">
+                <i class="fas fa-hourglass-half"></i> Pending Access Requests
+            </h2>
+
+            {% if pending_requests %}
+                {% for request in pending_requests %}
+                <div class="request-card">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5 class="mb-2">
+                                <i class="fas fa-user"></i> {{ request.user.get_full_name }}
+                                <span class="badge bg-warning text-dark badge-status ms-2">Pending</span>
+                            </h5>
+                            <p class="mb-1">
+                                <i class="fas fa-envelope"></i> <strong>Email:</strong> {{ request.user.email }}
+                            </p>
+                            <p class="mb-1">
+                                <i class="fas fa-building"></i> <strong>Institution:</strong> {{ request.user.institution }}
+                            </p>
+                            <p class="mb-1">
+                                <i class="fas fa-bullseye"></i> <strong>Purpose:</strong> {{ request.get_purpose_display }}
+                            </p>
+                            <p class="mb-0 text-muted small">
+                                <i class="fas fa-calendar"></i> Requested: {{ request.created_at|date:"d/m/Y H:i" }}
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <a href="{% url 'accounts:review_request' request.id %}" class="btn btn-review">
+                                <i class="fas fa-eye"></i> Review Request
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> No pending requests at this time.
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Recent Requests -->
+        <div class="mb-5">
+            <h2 class="section-title">
+                <i class="fas fa-history"></i> Recent Activity
+            </h2>
+
+            {% if recent_requests %}
+                <div class="table-responsive">
+                    <table class="table table-hover bg-white rounded">
+                        <thead class="table-light">
+                            <tr>
+                                <th><i class="fas fa-user"></i> Name</th>
+                                <th><i class="fas fa-envelope"></i> Email</th>
+                                <th><i class="fas fa-building"></i> Institution</th>
+                                <th><i class="fas fa-flag"></i> Status</th>
+                                <th><i class="fas fa-calendar"></i> Updated</th>
+                                <th><i class="fas fa-cog"></i> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for request in recent_requests %}
+                            <tr>
+                                <td>{{ request.user.get_full_name }}</td>
+                                <td>{{ request.user.email }}</td>
+                                <td>{{ request.user.institution }}</td>
+                                <td>
+                                    {% if request.status == 'approved' %}
+                                        <span class="badge bg-success">Approved</span>
+                                    {% elif request.status == 'rejected' %}
+                                        <span class="badge bg-danger">Rejected</span>
+                                    {% elif request.status == 'more_info' %}
+                                        <span class="badge bg-info">More Info Required</span>
+                                    {% else %}
+                                        <span class="badge bg-warning">{{ request.get_status_display }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ request.updated_at|date:"d/m/Y H:i" }}</td>
+                                <td>
+                                    <a href="{% url 'accounts:review_request' request.id %}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> No recent activity.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
