@@ -12,4 +12,5 @@ urlpatterns = [
     
     # Analytics and monitoring
     path('api/query-stats/', views.query_stats_api, name='query_stats_api'),
+    path('api/docking-job/<uuid:job_id>/status/', views.docking_job_status, name='docking_job_status'),
 ]
