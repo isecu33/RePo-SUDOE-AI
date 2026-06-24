@@ -202,6 +202,17 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # OpenAI Configuration for molecular intelligence
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+OPENAI_MODEL = os.getenv('OPENAI_MODEL', 'gpt-4o-mini')
+
+# Multi-provider AI configuration (Fase 1 - ROADMAP)
+ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY')
+ANTHROPIC_MODEL = os.getenv('ANTHROPIC_MODEL', 'claude-3-haiku-20240307')
+
+GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
+GOOGLE_MODEL = os.getenv('GOOGLE_MODEL', 'gemini-1.5-flash')
+
+OLLAMA_BASE_URL = os.getenv('OLLAMA_BASE_URL', 'http://localhost:11434')
+OLLAMA_MODEL = os.getenv('OLLAMA_MODEL', 'llama3.1:8b')
 
 # Clave de cifrado para las API keys de usuarios almacenadas en BD (Fase 1 - Multi-proveedor IA)
 FIELD_ENCRYPTION_KEY = os.getenv('FIELD_ENCRYPTION_KEY')
