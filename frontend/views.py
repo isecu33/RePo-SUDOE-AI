@@ -112,7 +112,7 @@ def chat_message(request):
         # Initialize query handler with language
         try:
             logger.debug(f"Inicializando QueryHandler con idioma: {language_code}")
-            query_handler = QueryHandler(language=language_code)
+            query_handler = QueryHandler(language=language_code, user=request.user)
             logger.debug("QueryHandler inicializado correctamente")
         except Exception as e:
             logger.error(f"Error inicializando QueryHandler: {e}")
@@ -371,7 +371,7 @@ def download_file(request, file_type, filename):
         from core.services.vina_service import DockerVinaService
         
         # Try both input and output directories
-        query_handler = QueryHandler()
+        query_handler = QueryHandler(user=request.user)
         vina_service = DockerVinaService()
 
         # Check input directories first (both temp and final), then output directory
@@ -555,7 +555,7 @@ def run_docking(request):
         
         # Import QueryHandler
         from core.services.query_handler import QueryHandler
-        query_handler = QueryHandler()
+        query_handler = QueryHandler(user=request.user)
         
         
         # Call handle_docking_flow but skip the parsing steps and go directly to execution
@@ -1071,7 +1071,7 @@ def download_experiment_zip(request, experiment_key):
         from core.services.query_handler import QueryHandler
         from core.services.vina_service import DockerVinaService
 
-        query_handler = QueryHandler()
+        query_handler = QueryHandler(user=request.user)
         # Use user's subdirectory
         user_id = request.user.id
         vina_service = DockerVinaService(user_id=user_id)
@@ -1340,7 +1340,7 @@ def get_pdb_center(request, pdb_id):
         from core.services.vina_service import DockerVinaService
         from core.services.query_handler import QueryHandler
 
-        query_handler = QueryHandler()
+        query_handler = QueryHandler(user=request.user)
 
         # Buscar el PDB en input/ (final y temp)
         pdb_filename = f"{pdb_id}.pdb"

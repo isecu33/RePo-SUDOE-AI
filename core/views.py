@@ -29,7 +29,7 @@ def molecular_query_api(request):
                 'error': 'Query cannot be empty'
             }, status=400)
         
-        query_handler = QueryHandler()
+        query_handler = QueryHandler(user=request.user)
         result = query_handler.process_query(
             user_query=user_query,
             estructura_seleccionada=estructura_seleccionada,
