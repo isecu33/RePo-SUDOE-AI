@@ -225,3 +225,12 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER', 'noreply@repo-sudoe-ai.com')
 SITE_URL = os.getenv('SITE_URL', 'http://127.0.0.1:8000')
+
+# =============================================================================
+# AutoDock Vina vía Docker (Fase 3 - ROADMAP: Docker-por-job)
+# =============================================================================
+VINA_DOCKER_IMAGE = os.getenv('VINA_DOCKER_IMAGE', 'cafernandezlo/dock-tools:v1.0')
+VINA_MAX_PARALLEL_JOBS = int(os.getenv('VINA_MAX_PARALLEL_JOBS', '2'))
+VINA_CPU_QUOTA = int(os.getenv('VINA_CPU_QUOTA', '100000'))
+VINA_MEM_LIMIT = os.getenv('VINA_MEM_LIMIT', '512m')
+VINA_TIMEOUT_SECONDS = int(os.getenv('VINA_TIMEOUT_SECONDS', '1200'))
