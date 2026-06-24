@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import ProteinDatabase, ConversationContext, MolecularQuery, StructureCache
+from .models import ProteinDatabase, ConversationContext, MolecularQuery, StructureCache, DockingJob
 
 
 @admin.register(ProteinDatabase)
@@ -138,3 +138,11 @@ class StructureCacheAdmin(admin.ModelAdmin):
         
         self.message_user(request, f'{validated} structures validated.')
     validate_structures.short_description = "Validate selected structures with RDKit"
+
+
+@admin.register(DockingJob)
+class DockingJobAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'drug', 'gene', 'structure', 'status', 'progress', 'created_at')
+    list_filter = ('status',)
+    search_fields = ('id', 'user__email', 'drug', 'gene', 'celery_task_id')
+    readonly_fields = ('id', 'created_at', 'started_at', 'finished_at')
