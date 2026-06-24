@@ -22,13 +22,15 @@ ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS]
 
 # Application definition for RePo-SUDOE-AI
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'frontend', 
+    'channels',
+    'frontend',
     'accounts',
     'core',  # Molecular intelligence app
 ]
@@ -64,6 +66,20 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+ASGI_APPLICATION = 'config.asgi.application'
+
+# ============================================================
+# Django Channels (Fase 4 - ROADMAP: WebSockets)
+# ============================================================
+# REDIS_CHANNELS_URL uses Redis db 1 (separate from Celery db 0)
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [os.getenv('REDIS_CHANNELS_URL', 'redis://redis:6379/1')],
+        },
+    },
+}
 
 # Database configuration for RePo-SUDOE-AI
 DATABASES = {

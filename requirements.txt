@@ -20,3 +20,5 @@ redis>=5.0.1
 
 anthropic>=0.34.0
 google-generativeai>=0.7.0
+channels[daphne]==4.1.0
+channels-redis==4.2.0
