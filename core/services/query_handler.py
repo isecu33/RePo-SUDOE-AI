@@ -40,8 +40,18 @@ class QueryHandler:
     Ported from the original Flask app.py implementation.
     """
     
-    def __init__(self, language='es'):
-        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    def __init__(self, language='es', user=None):
+        from .ai_provider import get_ai_provider_for_user, AIProviderConfigError, OpenAIProvider
+
+        try:
+            self.ai_provider = get_ai_provider_for_user(user)
+        except AIProviderConfigError as e:
+            print(f"[WARN] Proveedor de IA del usuario no disponible ({e}); usando OpenAI por defecto")
+            self.ai_provider = OpenAIProvider(
+                api_key=os.getenv("OPENAI_API_KEY"),
+                model=getattr(settings, 'OPENAI_MODEL', None),
+            )
+
         self.language = language  # 'es' or 'en'
         # Bases de datos separadas para genes y medicamentos
         self.genes_db_path = os.path.join(os.path.dirname(__file__), '../data/genes/genes_db.xlsx')
@@ -157,16 +167,8 @@ class QueryHandler:
             Responde SOLO: "docking" o "information"
             """
         
-        response = self.client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_query}
-            ],
-            temperature=0
-        )
-        
-        return response.choices[0].message.content.strip().lower()
+        content = self.ai_provider.generate_response(system_prompt, user_query, temperature=0)
+        return content.strip().lower()
     
     
     
@@ -207,18 +209,11 @@ class QueryHandler:
                 IMPORTANTE: Debes responder SOLO en ESPAÑOL. No uses inglés ni ningún otro idioma.
                 """
             
-            response = self.client.chat.completions.create(
-                model="gpt-4o",
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_query}
-                ],
-                temperature=0.7
-            )
-            
+            content = self.ai_provider.generate_response(system_prompt, user_query, temperature=0.7)
+
             return {
                 "type": "information",
-                "response": response.choices[0].message.content
+                "response": content
             }
             
         except Exception as e:
@@ -476,16 +471,7 @@ class QueryHandler:
                 Solo el JSON, sin texto explicativo.
                 """
 
-        response = self.client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_query}
-            ],
-            temperature=0.3
-        )
-
-        content = response.choices[0].message.content.strip()
+        content = self.ai_provider.generate_response(system_prompt, user_query, temperature=0.3).strip()
         json_match = re.search(r'\{[\s\S]*\}', content)
         if not json_match:
             raise ValueError(f"La respuesta de OpenAI no contiene JSON válido: {content}")
