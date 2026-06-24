@@ -1,6 +1,7 @@
 # File location: RePo-SUDOE-AI/accounts/models.py
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings
 from django.utils import timezone
 import uuid
 
@@ -213,3 +214,65 @@ class PasswordReset(models.Model):
         """Mark token as used"""
         self.used_at = timezone.now()
         self.save()
+
+from django_cryptography.fields import encrypt
+
+AI_PROVIDER_CHOICES = [
+    ('openai', 'OpenAI'),
+    ('anthropic', 'Anthropic (Claude)'),
+    ('google', 'Google Gemini'),
+    ('ollama', 'Ollama (local)'),
+]
+
+
+class UserProfile(models.Model):
+    """
+    Configuración de IA por usuario: proveedor elegido, API key cifrada
+    y parámetros asociados. Relación 1-a-1 con CustomUser.
+    """
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='ai_profile'
+    )
+
+    ai_provider = models.CharField(
+        max_length=20,
+        choices=AI_PROVIDER_CHOICES,
+        default='openai',
+        verbose_name="Proveedor de IA"
+    )
+
+    # Cifrada en BD mediante django-cryptography (transparente: se lee/escribe
+    # como texto plano en Python, pero se almacena cifrada con FIELD_ENCRYPTION_KEY)
+    encrypted_api_key = encrypt(
+        models.CharField(max_length=500, blank=True, default='', verbose_name="API Key")
+    )
+
+    # Modelo concreto a usar (ej. "gpt-4o-mini", "claude-3-haiku-20240307",
+    # "gemini-1.5-flash", "llama3.1:8b"). Vacío = usar el valor por defecto
+    # del proveedor (ver settings.CORE_SETTINGS / variables *_MODEL en .env).
+    ai_model = models.CharField(
+        max_length=100, blank=True, default='',
+        verbose_name="Modelo",
+        help_text="Déjalo vacío para usar el modelo por defecto del proveedor"
+    )
+
+    # Solo aplica si ai_provider == 'ollama'. Vacío = usar settings.OLLAMA_BASE_URL
+    ollama_base_url = models.CharField(
+        max_length=255, blank=True, default='',
+        verbose_name="URL de Ollama"
+    )
+
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Perfil de IA del usuario"
+        verbose_name_plural = "Perfiles de IA de usuarios"
+
+    def __str__(self):
+        return f"AI profile for {self.user.email} ({self.get_ai_provider_display()})"
+
+    def has_custom_api_key(self):
+        return bool(self.encrypted_api_key)

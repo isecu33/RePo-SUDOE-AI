@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.html import format_html
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from .models import CustomUser, AccessRequest, EmailVerification, PasswordReset
+from .models import CustomUser, AccessRequest, EmailVerification, PasswordReset, UserProfile
 
 
 class CustomUserAdmin(UserAdmin):
@@ -142,6 +142,14 @@ admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(AccessRequest, AccessRequestAdmin)
 admin.site.register(EmailVerification, EmailVerificationAdmin)
 admin.site.register(PasswordReset, PasswordResetAdmin)
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'ai_provider', 'ai_model', 'updated_at')
+    list_filter = ('ai_provider',)
+    search_fields = ('user__email', 'user__username')
+    readonly_fields = ('created_at', 'updated_at')
+
 
 # Personalizar el header del admin
 admin.site.site_header = "RePo-SUDOE-AI Administration"
