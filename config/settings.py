@@ -222,3 +222,17 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER', 'noreply@repo-sudoe-ai.com')
 SITE_URL = os.getenv('SITE_URL', 'http://127.0.0.1:8000')
+
+# =============================================================================
+# Celery (Fase 2 - ROADMAP: procesamiento asíncrono de jobs de docking)
+# =============================================================================
+REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
+
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_WORKER_CONCURRENCY = int(os.getenv('CELERY_CONCURRENCY', '2'))

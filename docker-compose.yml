@@ -23,6 +23,20 @@ services:
       - repo-sudoe-network
     restart: unless-stopped
 
+
+  # Redis (broker de Celery; en Fase 4 también se usará para Django Channels)
+  redis:
+    image: redis:7-alpine
+    container_name: repo-sudoe-redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - repo-sudoe-network
+    restart: unless-stopped
+
   # Django Application with Gunicorn (Production)
   web:
     build: .
@@ -43,6 +57,28 @@ services:
       - .env
     depends_on:
       db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - repo-sudoe-network
+    restart: unless-stopped
+
+
+  # Celery worker (ejecuta jobs de docking en segundo plano)
+  celery_worker:
+    build: .
+    container_name: repo-sudoe-celery-worker
+    command: celery -A config worker -l info --concurrency=${CELERY_CONCURRENCY:-2}
+    volumes:
+      - .:/app
+      - media_volume:/app/media
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     networks:
       - repo-sudoe-network
