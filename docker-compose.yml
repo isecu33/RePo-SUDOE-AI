@@ -45,7 +45,7 @@ services:
       bash -c "
         python manage.py migrate &&
         python manage.py collectstatic --noinput &&
-        gunicorn config.wsgi:application --config gunicorn.conf.py
+        daphne -b 0.0.0.0 -p 8000 config.asgi:application
       "
     volumes:
       - .:/app
