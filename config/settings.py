@@ -203,6 +203,9 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 # OpenAI Configuration for molecular intelligence
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
+# Clave de cifrado para las API keys de usuarios almacenadas en BD (Fase 1 - Multi-proveedor IA)
+FIELD_ENCRYPTION_KEY = os.getenv('FIELD_ENCRYPTION_KEY')
+
 # Core app settings for molecular intelligence
 CORE_SETTINGS = {
     'OPENAI_MODEL': 'gpt-4o',
