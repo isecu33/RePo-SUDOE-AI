@@ -138,6 +138,34 @@ Los campos obligatorios son:
 
 Consulta `.env.example` para la documentación completa de cada variable.
 
+
+### Ollama (IA local, opcional)
+
+El proyecto incluye un servicio Docker `ollama` (`docker-compose.yml`) que permite usar modelos de IA locales, sin API key ni coste por uso.
+
+1. Levanta el servicio (incluido en `docker compose up`):
+   ```bash
+   docker compose up -d ollama
+   ```
+2. Descarga un modelo (solo la primera vez; se almacena en el volumen `ollama_models`):
+   ```bash
+   docker exec repo-sudoe-ollama ollama pull llama3.1:8b
+   ```
+3. En tu perfil de usuario (`/accounts/profile/` o equivalente), selecciona `ollama` como proveedor de IA — no se requiere API key.
+4. Si ejecutas el backend (`web`/`celery_worker`) FUERA de Docker (entorno de desarrollo nativo), cambia `OLLAMA_BASE_URL` en tu `.env` a `http://localhost:11434`.
+
+Modelos recomendados:
+
+| Modelo | Tamaño aprox. | Calidad | Velocidad | Uso recomendado |
+|--------|--------------|---------|-----------|------------------|
+| `llama3.2:3b` | ~2 GB | ★★★☆☆ | Muy rápida | Desarrollo / pruebas |
+| `llama3.1:8b` | ~5 GB | ★★★★☆ | Rápida | Uso general (por defecto) |
+| `qwen2.5:7b` | ~5 GB | ★★★★☆ | Rápida | Análisis científico |
+| `mistral:7b` | ~4 GB | ★★★★☆ | Rápida | Código + análisis |
+| `llama3.1:70b` | ~40 GB | ★★★★★ | Lenta (requiere GPU) | Producción con GPU |
+
+Para usar un modelo distinto al de por defecto, descárgalo con `docker exec repo-sudoe-ollama ollama pull <modelo>` y configúralo como `OLLAMA_MODEL` en `.env` (o por usuario, en su perfil — campo `ai_model`).
+
 ### Ejecución en desarrollo
 
 ```bash
@@ -261,6 +289,34 @@ docker compose exec web python manage.py migrate
 docker compose exec web python manage.py createsuperuser
 # → open http://localhost:8000
 ```
+
+### Ollama (local AI, optional)
+
+The project includes a Docker `ollama` service (`docker-compose.yml`) for running AI models locally — no API key or usage cost required.
+
+1. Start the service (included in `docker compose up`):
+   ```bash
+   docker compose up -d ollama
+   ```
+2. Download a model (only once; stored in the `ollama_models` volume):
+   ```bash
+   docker exec repo-sudoe-ollama ollama pull llama3.1:8b
+   ```
+3. In your user profile (`/accounts/profile/` or equivalent), select `ollama` as the AI provider — no API key needed.
+4. If you run the backend (`web`/`celery_worker`) OUTSIDE Docker (native dev environment), change `OLLAMA_BASE_URL` in your `.env` to `http://localhost:11434`.
+
+Recommended models:
+
+| Model | Approx. size | Quality | Speed | Recommended use |
+|-------|-------------|---------|-------|-----------------|
+| `llama3.2:3b` | ~2 GB | ★★★☆☆ | Very fast | Development / testing |
+| `llama3.1:8b` | ~5 GB | ★★★★☆ | Fast | General use (default) |
+| `qwen2.5:7b` | ~5 GB | ★★★★☆ | Fast | Scientific analysis |
+| `mistral:7b` | ~4 GB | ★★★★☆ | Fast | Code + analysis |
+| `llama3.1:70b` | ~40 GB | ★★★★★ | Slow (GPU required) | Production with GPU |
+
+To use a model other than the default, download it with `docker exec repo-sudoe-ollama ollama pull <model>` and set it as `OLLAMA_MODEL` in `.env`.
+
 
 ### License
 

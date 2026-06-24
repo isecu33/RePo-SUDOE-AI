@@ -4,3 +4,8 @@
 pytest>=7.4.4
 pytest-django>=4.7.0
 coverage>=7.4.1
+
+# Lint / format (ver CONTRIBUTING.md)
+flake8>=7.1.0
+black>=24.4.0
+isort>=5.13.0

@@ -1,9 +1,11 @@
-from django.test import TestCase, Client
-from django.urls import reverse
-from django.contrib.auth import get_user_model
-from accounts.models import CustomUser, EmailVerification, AccessRequest
-from django.utils import timezone
 from datetime import timedelta
+
+from django.contrib.auth import get_user_model
+from django.test import Client, TestCase
+from django.urls import reverse
+from django.utils import timezone
+
+from accounts.models import AccessRequest, EmailVerification
 
 User = get_user_model()
 
@@ -13,39 +15,37 @@ class CustomUserModelTests(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
-            username='testuser',
-            email='test@example.com',
-            password='testpass123',
-            first_name='Test',
-            last_name='User',
-            institution='Test University',
-            research_area='Molecular Biology'
+            username="testuser",
+            email="test@example.com",
+            password="testpass123",
+            first_name="Test",
+            last_name="User",
+            institution="Test University",
+            research_area="Molecular Biology",
         )
 
     def test_user_creation(self):
         """Test custom user is created correctly"""
-        self.assertEqual(self.user.email, 'test@example.com')
-        self.assertEqual(self.user.username, 'testuser')
-        self.assertEqual(self.user.institution, 'Test University')
+        self.assertEqual(self.user.email, "test@example.com")
+        self.assertEqual(self.user.username, "testuser")
+        self.assertEqual(self.user.institution, "Test University")
         self.assertFalse(self.user.is_verified)
         self.assertFalse(self.user.is_approved)
 
     def test_email_as_username_field(self):
         """Test email is used as login field"""
-        self.assertEqual(User.USERNAME_FIELD, 'email')
+        self.assertEqual(User.USERNAME_FIELD, "email")
 
     def test_get_full_name(self):
         """Test full name formatting"""
-        self.assertEqual(self.user.get_full_name(), 'Test User')
+        self.assertEqual(self.user.get_full_name(), "Test User")
 
     def test_get_full_name_fallback(self):
         """Test username fallback when no name provided"""
         user = User.objects.create_user(
-            username='noname',
-            email='noname@example.com',
-            password='pass123'
+            username="noname", email="noname@example.com", password="pass123"
         )
-        self.assertEqual(user.get_full_name(), 'noname')
+        self.assertEqual(user.get_full_name(), "noname")
 
     def test_can_access_frontend_unapproved(self):
         """Test unapproved users cannot access frontend"""
@@ -61,9 +61,7 @@ class CustomUserModelTests(TestCase):
     def test_approve_account(self):
         """Test account approval workflow"""
         admin = User.objects.create_superuser(
-            username='admin',
-            email='admin@example.com',
-            password='admin123'
+            username="admin", email="admin@example.com", password="admin123"
         )
 
         self.user.approve_account(admin)
@@ -83,9 +81,7 @@ class EmailVerificationModelTests(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
-            username='testuser',
-            email='test@example.com',
-            password='testpass123'
+            username="testuser", email="test@example.com", password="testpass123"
         )
         self.verification = EmailVerification.objects.create(user=self.user)
 
@@ -119,40 +115,34 @@ class AccessRequestModelTests(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
-            username='researcher',
-            email='researcher@example.com',
-            password='pass123'
+            username="researcher", email="researcher@example.com", password="pass123"
         )
         self.admin = User.objects.create_superuser(
-            username='admin',
-            email='admin@example.com',
-            password='admin123'
+            username="admin", email="admin@example.com", password="admin123"
         )
 
     def test_access_request_creation(self):
         """Test access request is created correctly"""
         request = AccessRequest.objects.create(
             user=self.user,
-            purpose='academic',
-            project_description='Cancer research project',
-            supervisor_email='supervisor@university.edu'
+            purpose="academic",
+            project_description="Cancer research project",
+            supervisor_email="supervisor@university.edu",
         )
 
-        self.assertEqual(request.status, 'pending')
-        self.assertEqual(request.purpose, 'academic')
+        self.assertEqual(request.status, "pending")
+        self.assertEqual(request.purpose, "academic")
         self.assertIsNotNone(request.id)
 
     def test_approve_request(self):
         """Test access request approval"""
         request = AccessRequest.objects.create(
-            user=self.user,
-            purpose='academic',
-            project_description='Research project'
+            user=self.user, purpose="academic", project_description="Research project"
         )
 
         request.approve(self.admin)
 
-        self.assertEqual(request.status, 'approved')
+        self.assertEqual(request.status, "approved")
         self.assertEqual(request.reviewed_by, self.admin)
         self.assertIsNotNone(request.reviewed_at)
 
@@ -163,36 +153,28 @@ class AccessRequestModelTests(TestCase):
     def test_reject_request(self):
         """Test access request rejection"""
         request = AccessRequest.objects.create(
-            user=self.user,
-            purpose='commercial',
-            project_description='Commercial use'
+            user=self.user, purpose="commercial", project_description="Commercial use"
         )
 
         reason = "Commercial use not allowed in research platform"
         request.reject(self.admin, reason)
 
-        self.assertEqual(request.status, 'rejected')
+        self.assertEqual(request.status, "rejected")
         self.assertEqual(request.reviewed_by, self.admin)
         self.assertEqual(request.admin_notes, reason)
         self.assertIsNotNone(request.reviewed_at)
 
     def test_request_ordering(self):
         """Test requests are ordered by creation date (newest first)"""
-        request1 = AccessRequest.objects.create(
-            user=self.user,
-            purpose='academic',
-            project_description='Project 1'
+        request1 = AccessRequest.objects.create(  # noqa: F841
+            user=self.user, purpose="academic", project_description="Project 1"
         )
 
         user2 = User.objects.create_user(
-            username='user2',
-            email='user2@example.com',
-            password='pass123'
+            username="user2", email="user2@example.com", password="pass123"
         )
         request2 = AccessRequest.objects.create(
-            user=user2,
-            purpose='academic',
-            project_description='Project 2'
+            user=user2, purpose="academic", project_description="Project 2"
         )
 
         requests = AccessRequest.objects.all()
@@ -205,19 +187,19 @@ class AuthenticationFlowTests(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(
-            username='testuser',
-            email='test@example.com',
-            password='testpass123',
+            username="testuser",
+            email="test@example.com",
+            password="testpass123",
             is_verified=True,
-            is_approved=True
+            is_approved=True,
         )
 
     def test_login_with_email(self):
         """Test login with email instead of username"""
-        response = self.client.post(reverse('accounts:login'), {
-            'username': 'test@example.com',  # EMAIL field
-            'password': 'testpass123'
-        })
+        response = self.client.post(  # noqa: F841
+            reverse("accounts:login"),
+            {"username": "test@example.com", "password": "testpass123"},  # EMAIL field
+        )
 
         # Should redirect after successful login
         self.assertEqual(response.status_code, 302)
@@ -225,17 +207,17 @@ class AuthenticationFlowTests(TestCase):
     def test_login_unapproved_user(self):
         """Test unapproved users cannot login to frontend"""
         unapproved = User.objects.create_user(
-            username='unapproved',
-            email='unapproved@example.com',
-            password='pass123',
+            username="unapproved",
+            email="unapproved@example.com",
+            password="pass123",
             is_verified=True,
-            is_approved=False  # Not approved
+            is_approved=False,  # Not approved
         )
 
-        response = self.client.post(reverse('accounts:login'), {
-            'username': 'unapproved@example.com',
-            'password': 'pass123'
-        })
+        response = self.client.post(  # noqa: F841
+            reverse("accounts:login"),
+            {"username": "unapproved@example.com", "password": "pass123"},
+        )
 
         # Login succeeds but access to frontend should be denied
         # (actual enforcement depends on @full_access_required decorator)

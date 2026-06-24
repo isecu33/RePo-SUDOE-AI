@@ -6,27 +6,25 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('frontend', '0001_initial'),
+        ("frontend", "0001_initial"),
     ]
 
     operations = [
         # Rename ligand choice to drug in UploadedFile.file_type
         migrations.RunSQL(
             "UPDATE frontend_uploadedfile SET file_type = 'drug' WHERE file_type = 'ligand';",
-            reverse_sql="UPDATE frontend_uploadedfile SET file_type = 'ligand' WHERE file_type = 'drug';"
+            reverse_sql="UPDATE frontend_uploadedfile SET file_type = 'ligand' WHERE file_type = 'drug';",
         ),
-        
         # Rename ligand_file field to drug_file in DockingSimulation
         migrations.RenameField(
-            model_name='dockingsimulation',
-            old_name='ligand_file',
-            new_name='drug_file',
+            model_name="dockingsimulation",
+            old_name="ligand_file",
+            new_name="drug_file",
         ),
-        
         # Rename remove_non_protein_atoms to remove_non_gene_atoms
         migrations.RenameField(
-            model_name='dockingsimulation',
-            old_name='remove_non_protein_atoms',
-            new_name='remove_non_gene_atoms',
+            model_name="dockingsimulation",
+            old_name="remove_non_protein_atoms",
+            new_name="remove_non_gene_atoms",
         ),
     ]

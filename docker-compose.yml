@@ -23,6 +23,20 @@ services:
       - repo-sudoe-network
     restart: unless-stopped
 
+
+  # Redis (broker de Celery; en Fase 4 también se usará para Django Channels)
+  redis:
+    image: redis:7-alpine
+    container_name: repo-sudoe-redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - repo-sudoe-network
+    restart: unless-stopped
+
   # Django Application with Gunicorn (Production)
   web:
     build: .
@@ -31,12 +45,14 @@ services:
       bash -c "
         python manage.py migrate &&
         python manage.py collectstatic --noinput &&
-        gunicorn config.wsgi:application --config gunicorn.conf.py
+        daphne -b 0.0.0.0 -p 8000 config.asgi:application
       "
     volumes:
       - .:/app
       - static_volume:/app/staticfiles
       - media_volume:/app/media
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${VINA_JOBS_DIR:-/tmp/vina_jobs}:${VINA_JOBS_DIR:-/tmp/vina_jobs}
     ports:
       - "${WEB_PORT:-8000}:8000"
     env_file:
@@ -44,9 +60,54 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     networks:
       - repo-sudoe-network
     restart: unless-stopped
+
+
+  # Celery worker (ejecuta jobs de docking en segundo plano)
+  celery_worker:
+    build: .
+    container_name: repo-sudoe-celery-worker
+    command: celery -A config worker -l info --concurrency=${CELERY_CONCURRENCY:-2}
+    volumes:
+      - .:/app
+      - media_volume:/app/media
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${VINA_JOBS_DIR:-/tmp/vina_jobs}:${VINA_JOBS_DIR:-/tmp/vina_jobs}
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - repo-sudoe-network
+    restart: unless-stopped
+
+
+  # Ollama - IA local (Fase 5, opcional)
+  ollama:
+    image: ollama/ollama:latest
+    container_name: repo-sudoe-ollama
+    ports:
+      - "${OLLAMA_PORT:-11434}:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    networks:
+      - repo-sudoe-network
+    restart: unless-stopped
+    # Para usar GPU NVIDIA (requiere nvidia-container-toolkit instalado en el host):
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
 
   # Nginx (Optional - for production with reverse proxy)
   nginx:
@@ -71,6 +132,7 @@ volumes:
   postgres_data:
   static_volume:
   media_volume:
+  ollama_models:
 
 networks:
   repo-sudoe-network:
