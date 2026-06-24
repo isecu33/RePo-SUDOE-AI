@@ -37,8 +37,8 @@ class DockingJobConsumer(AsyncWebsocketConsumer):
     """
 
     async def connect(self):
-        self.job_id = self.scope['url_route']['kwargs']['job_id']
-        user = self.scope['user']
+        self.job_id = self.scope["url_route"]["kwargs"]["job_id"]
+        user = self.scope["user"]
 
         if not user.is_authenticated:
             await self.close(code=4001)
@@ -53,29 +53,34 @@ class DockingJobConsumer(AsyncWebsocketConsumer):
             await self.close(code=4003)
             return
 
-        self.group_name = f'docking_job_{self.job_id}'
+        self.group_name = f"docking_job_{self.job_id}"
         await self.channel_layer.group_add(self.group_name, self.channel_name)
         await self.accept()
 
-        await self.send(text_data=json.dumps({
-            'type': 'connection_established',
-            'job_id': str(job.id),
-            'status': job.status,
-            'progress': job.progress,
-        }))
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "connection_established",
+                    "job_id": str(job.id),
+                    "status": job.status,
+                    "progress": job.progress,
+                }
+            )
+        )
 
     async def disconnect(self, close_code):
-        if hasattr(self, 'group_name'):
+        if hasattr(self, "group_name"):
             await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
     async def job_update(self, event):
         """Maneja mensajes de tipo 'job_update' enviados al grupo y los
         reenvía al cliente WebSocket como JSON."""
-        await self.send(text_data=json.dumps(event['data']))
+        await self.send(text_data=json.dumps(event["data"]))
 
     @database_sync_to_async
     def _get_job(self, job_id):
         from core.models import DockingJob
+
         try:
             return DockingJob.objects.get(id=job_id)
         except (DockingJob.DoesNotExist, ValueError, ValidationError):

@@ -12,90 +12,306 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('frontend', '0001_initial'),
+        ("frontend", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='StructureCache',
+            name="StructureCache",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('pdb_code', models.CharField(db_index=True, max_length=10, unique=True, verbose_name='PDB Code')),
-                ('structure_data', models.TextField(help_text='Raw PDB file content', verbose_name='PDB Structure Data')),
-                ('download_url', models.URLField(help_text='Original download URL', verbose_name='Download URL')),
-                ('file_size', models.PositiveIntegerField(verbose_name='File Size (bytes)')),
-                ('is_valid_structure', models.BooleanField(default=True, help_text='Whether RDKit could successfully parse this structure')),
-                ('validation_error', models.TextField(blank=True, help_text='Error message if structure validation failed')),
-                ('downloaded_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('last_accessed', models.DateTimeField(default=django.utils.timezone.now)),
-                ('access_count', models.PositiveIntegerField(default=0)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "pdb_code",
+                    models.CharField(
+                        db_index=True,
+                        max_length=10,
+                        unique=True,
+                        verbose_name="PDB Code",
+                    ),
+                ),
+                (
+                    "structure_data",
+                    models.TextField(
+                        help_text="Raw PDB file content",
+                        verbose_name="PDB Structure Data",
+                    ),
+                ),
+                (
+                    "download_url",
+                    models.URLField(
+                        help_text="Original download URL", verbose_name="Download URL"
+                    ),
+                ),
+                (
+                    "file_size",
+                    models.PositiveIntegerField(verbose_name="File Size (bytes)"),
+                ),
+                (
+                    "is_valid_structure",
+                    models.BooleanField(
+                        default=True,
+                        help_text="Whether RDKit could successfully parse this structure",
+                    ),
+                ),
+                (
+                    "validation_error",
+                    models.TextField(
+                        blank=True,
+                        help_text="Error message if structure validation failed",
+                    ),
+                ),
+                (
+                    "downloaded_at",
+                    models.DateTimeField(default=django.utils.timezone.now),
+                ),
+                (
+                    "last_accessed",
+                    models.DateTimeField(default=django.utils.timezone.now),
+                ),
+                ("access_count", models.PositiveIntegerField(default=0)),
             ],
             options={
-                'verbose_name': 'Structure Cache',
-                'verbose_name_plural': 'Structure Cache',
-                'ordering': ['-last_accessed'],
+                "verbose_name": "Structure Cache",
+                "verbose_name_plural": "Structure Cache",
+                "ordering": ["-last_accessed"],
             },
         ),
         migrations.CreateModel(
-            name='ConversationContext',
+            name="ConversationContext",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('current_intent', models.CharField(choices=[('general', 'General Query'), ('docking', 'Docking Request'), ('structure_search', 'Structure Search'), ('parameter_extraction', 'Parameter Extraction')], default='general', max_length=20)),
-                ('extracted_parameters', models.JSONField(default=dict, help_text='Stores extracted drug, gene, and structure parameters')),
-                ('workflow_state', models.CharField(default='initial', help_text='Current state in multi-step workflow', max_length=50)),
-                ('awaiting_confirmation', models.BooleanField(default=False, help_text='Whether the system is waiting for user confirmation')),
-                ('available_structures', models.JSONField(default=list, help_text='List of available protein structures for selection')),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('chat_session', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='molecular_context', to='frontend.chatsession')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "current_intent",
+                    models.CharField(
+                        choices=[
+                            ("general", "General Query"),
+                            ("docking", "Docking Request"),
+                            ("structure_search", "Structure Search"),
+                            ("parameter_extraction", "Parameter Extraction"),
+                        ],
+                        default="general",
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "extracted_parameters",
+                    models.JSONField(
+                        default=dict,
+                        help_text="Stores extracted drug, gene, and structure parameters",
+                    ),
+                ),
+                (
+                    "workflow_state",
+                    models.CharField(
+                        default="initial",
+                        help_text="Current state in multi-step workflow",
+                        max_length=50,
+                    ),
+                ),
+                (
+                    "awaiting_confirmation",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Whether the system is waiting for user confirmation",
+                    ),
+                ),
+                (
+                    "available_structures",
+                    models.JSONField(
+                        default=list,
+                        help_text="List of available protein structures for selection",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "chat_session",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="molecular_context",
+                        to="frontend.chatsession",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Conversation Context',
-                'verbose_name_plural': 'Conversation Contexts',
+                "verbose_name": "Conversation Context",
+                "verbose_name_plural": "Conversation Contexts",
             },
         ),
         migrations.CreateModel(
-            name='MolecularQuery',
+            name="MolecularQuery",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('query_type', models.CharField(choices=[('general', 'General Information'), ('docking', 'Docking Request'), ('structure_lookup', 'Structure Lookup')], max_length=20)),
-                ('original_query', models.TextField(verbose_name='Original User Query')),
-                ('extracted_parameters', models.JSONField(default=dict, help_text='Parameters extracted by OpenAI')),
-                ('response_data', models.JSONField(default=dict, help_text='Complete response data')),
-                ('success', models.BooleanField(default=True)),
-                ('error_message', models.TextField(blank=True)),
-                ('processing_time_ms', models.PositiveIntegerField(blank=True, help_text='Processing time in milliseconds', null=True)),
-                ('openai_calls', models.PositiveSmallIntegerField(default=0, help_text='Number of OpenAI API calls made')),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('chat_session', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='molecular_queries', to='frontend.chatsession')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='molecular_queries', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                (
+                    "query_type",
+                    models.CharField(
+                        choices=[
+                            ("general", "General Information"),
+                            ("docking", "Docking Request"),
+                            ("structure_lookup", "Structure Lookup"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "original_query",
+                    models.TextField(verbose_name="Original User Query"),
+                ),
+                (
+                    "extracted_parameters",
+                    models.JSONField(
+                        default=dict, help_text="Parameters extracted by OpenAI"
+                    ),
+                ),
+                (
+                    "response_data",
+                    models.JSONField(default=dict, help_text="Complete response data"),
+                ),
+                ("success", models.BooleanField(default=True)),
+                ("error_message", models.TextField(blank=True)),
+                (
+                    "processing_time_ms",
+                    models.PositiveIntegerField(
+                        blank=True,
+                        help_text="Processing time in milliseconds",
+                        null=True,
+                    ),
+                ),
+                (
+                    "openai_calls",
+                    models.PositiveSmallIntegerField(
+                        default=0, help_text="Number of OpenAI API calls made"
+                    ),
+                ),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
+                (
+                    "chat_session",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="molecular_queries",
+                        to="frontend.chatsession",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="molecular_queries",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Molecular Query',
-                'verbose_name_plural': 'Molecular Queries',
-                'ordering': ['-created_at'],
+                "verbose_name": "Molecular Query",
+                "verbose_name_plural": "Molecular Queries",
+                "ordering": ["-created_at"],
             },
         ),
         migrations.CreateModel(
-            name='ProteinDatabase',
+            name="ProteinDatabase",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('hgnc_symbol', models.CharField(db_index=True, help_text='Official gene symbol from HGNC', max_length=50, verbose_name='HGNC Symbol')),
-                ('gene_name', models.CharField(db_index=True, help_text='Full gene name', max_length=255, verbose_name='Gene Name')),
-                ('pdb_codes', models.TextField(blank=True, help_text='Semicolon-separated list of PDB structure codes', verbose_name='PDB Codes')),
-                ('description', models.TextField(blank=True, verbose_name='Description')),
-                ('chromosome', models.CharField(blank=True, max_length=10, verbose_name='Chromosome')),
-                ('gene_type', models.CharField(blank=True, max_length=50, verbose_name='Gene Type')),
-                ('synonyms', models.TextField(blank=True, verbose_name='Gene Synonyms')),
-                ('uniprot_id', models.CharField(blank=True, max_length=20, verbose_name='UniProt ID')),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "hgnc_symbol",
+                    models.CharField(
+                        db_index=True,
+                        help_text="Official gene symbol from HGNC",
+                        max_length=50,
+                        verbose_name="HGNC Symbol",
+                    ),
+                ),
+                (
+                    "gene_name",
+                    models.CharField(
+                        db_index=True,
+                        help_text="Full gene name",
+                        max_length=255,
+                        verbose_name="Gene Name",
+                    ),
+                ),
+                (
+                    "pdb_codes",
+                    models.TextField(
+                        blank=True,
+                        help_text="Semicolon-separated list of PDB structure codes",
+                        verbose_name="PDB Codes",
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(blank=True, verbose_name="Description"),
+                ),
+                (
+                    "chromosome",
+                    models.CharField(
+                        blank=True, max_length=10, verbose_name="Chromosome"
+                    ),
+                ),
+                (
+                    "gene_type",
+                    models.CharField(
+                        blank=True, max_length=50, verbose_name="Gene Type"
+                    ),
+                ),
+                (
+                    "synonyms",
+                    models.TextField(blank=True, verbose_name="Gene Synonyms"),
+                ),
+                (
+                    "uniprot_id",
+                    models.CharField(
+                        blank=True, max_length=20, verbose_name="UniProt ID"
+                    ),
+                ),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'verbose_name': 'Protein Database Entry',
-                'verbose_name_plural': 'Protein Database Entries',
-                'indexes': [models.Index(fields=['hgnc_symbol'], name='core_protei_hgnc_sy_18cc14_idx'), models.Index(fields=['gene_name'], name='core_protei_gene_na_91b7ec_idx')],
+                "verbose_name": "Protein Database Entry",
+                "verbose_name_plural": "Protein Database Entries",
+                "indexes": [
+                    models.Index(
+                        fields=["hgnc_symbol"], name="core_protei_hgnc_sy_18cc14_idx"
+                    ),
+                    models.Index(
+                        fields=["gene_name"], name="core_protei_gene_na_91b7ec_idx"
+                    ),
+                ],
             },
         ),
     ]

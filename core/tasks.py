@@ -27,13 +27,13 @@ def _notify_job_progress(job_id: str, status: str, progress: int, **extra):
         if channel_layer is None:
             return
         async_to_sync(channel_layer.group_send)(
-            f'docking_job_{job_id}',
+            f"docking_job_{job_id}",
             {
-                'type': 'job_update',
-                'data': {
-                    'job_id': str(job_id),
-                    'status': status,
-                    'progress': progress,
+                "type": "job_update",
+                "data": {
+                    "job_id": str(job_id),
+                    "status": status,
+                    "progress": progress,
                     **extra,
                 },
             },
@@ -41,7 +41,9 @@ def _notify_job_progress(job_id: str, status: str, progress: int, **extra):
     except Exception:
         logger.warning(
             "No se pudo enviar notificación WS para DockingJob %s (status=%s)",
-            job_id, status, exc_info=True,
+            job_id,
+            status,
+            exc_info=True,
         )
 
 
@@ -59,13 +61,13 @@ def run_docking_job(self, job_id):
     from core.services.query_handler import QueryHandler
 
     try:
-        job = DockingJob.objects.select_related('user').get(id=job_id)
+        job = DockingJob.objects.select_related("user").get(id=job_id)
     except DockingJob.DoesNotExist:
         logger.error("DockingJob %s no encontrado", job_id)
         return
 
     job.celery_task_id = self.request.id or ""
-    job.save(update_fields=['celery_task_id'])
+    job.save(update_fields=["celery_task_id"])
     job.mark_running()
     _notify_job_progress(job_id, job.status, job.progress)  # status="running"
 
@@ -91,23 +93,32 @@ def run_docking_job(self, job_id):
 
         if response.get("type") == "docking_error":
             job.mark_failed(
-                error_message=str(result.get('error', 'Error desconocido en docking')),
+                error_message=str(result.get("error", "Error desconocido en docking")),
                 result_data=response,
             )
             _notify_job_progress(  # status="failed"
-                job_id, job.status, job.progress,
-                error=job.error_message, result=job.result_data,
+                job_id,
+                job.status,
+                job.progress,
+                error=job.error_message,
+                result=job.result_data,
             )
         else:
             job.mark_completed(response)
             _notify_job_progress(  # status="completed"
-                job_id, job.status, job.progress, result=job.result_data,
+                job_id,
+                job.status,
+                job.progress,
+                result=job.result_data,
             )
 
     except Exception as exc:
         logger.exception("Error ejecutando DockingJob %s", job_id)
         job.mark_failed(error_message=str(exc))
         _notify_job_progress(  # status="failed" (excepción)
-            job_id, job.status, job.progress, error=job.error_message,
+            job_id,
+            job.status,
+            job.progress,
+            error=job.error_message,
         )
         raise

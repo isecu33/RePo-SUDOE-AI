@@ -13,21 +13,22 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 import docker
-from docker.errors import DockerException, ImageNotFound, ContainerError
 from django.conf import settings
+from docker.errors import ContainerError, DockerException, ImageNotFound
 
 logger = logging.getLogger(__name__)
 
 
 class DockerJobRunnerError(Exception):
     """Error al preparar o ejecutar un contenedor Docker de Vina."""
+
     pass
 
 
 # Semáforo a nivel de proceso: limita cuántos contenedores Vina se ejecutan
 # simultáneamente desde ESTE proceso (p.ej. un worker Celery). Combinado con
 # CELERY_WORKER_CONCURRENCY, controla la carga total sobre el host Docker.
-_vina_semaphore = threading.Semaphore(getattr(settings, 'VINA_MAX_PARALLEL_JOBS', 2))
+_vina_semaphore = threading.Semaphore(getattr(settings, "VINA_MAX_PARALLEL_JOBS", 2))
 
 
 class DockerJobRunner:
@@ -69,15 +70,17 @@ class DockerJobRunner:
         with _vina_semaphore:
             return self._run_container(input_dir, output_dir, vina_args)
 
-    def _run_container(self, input_dir: str, output_dir: str, vina_args: List[str]) -> Dict:
+    def _run_container(
+        self, input_dir: str, output_dir: str, vina_args: List[str]
+    ) -> Dict:
         Path(output_dir).mkdir(parents=True, exist_ok=True)
 
         volumes = {
-            str(Path(input_dir).resolve()): {'bind': '/input', 'mode': 'ro'},
-            str(Path(output_dir).resolve()): {'bind': '/output', 'mode': 'rw'},
+            str(Path(input_dir).resolve()): {"bind": "/input", "mode": "ro"},
+            str(Path(output_dir).resolve()): {"bind": "/output", "mode": "rw"},
         }
 
-        timeout = getattr(settings, 'VINA_TIMEOUT_SECONDS', 1200)
+        timeout = getattr(settings, "VINA_TIMEOUT_SECONDS", 1200)
         container = None
 
         try:
@@ -88,14 +91,16 @@ class DockerJobRunner:
                 working_dir="/output",
                 detach=True,
                 cpu_period=100000,
-                cpu_quota=getattr(settings, 'VINA_CPU_QUOTA', 100000),
-                mem_limit=getattr(settings, 'VINA_MEM_LIMIT', '512m'),
+                cpu_quota=getattr(settings, "VINA_CPU_QUOTA", 100000),
+                mem_limit=getattr(settings, "VINA_MEM_LIMIT", "512m"),
             )
 
             try:
                 exit_status = container.wait(timeout=timeout)
             except Exception as exc:
-                logger.error("Timeout (%ss) esperando el contenedor Vina: %s", timeout, exc)
+                logger.error(
+                    "Timeout (%ss) esperando el contenedor Vina: %s", timeout, exc
+                )
                 try:
                     container.kill()
                 except Exception:
@@ -104,16 +109,24 @@ class DockerJobRunner:
                     f"Timeout ({timeout}s) ejecutando Vina en Docker"
                 ) from exc
 
-            exit_code = exit_status.get('StatusCode', -1) if isinstance(exit_status, dict) else int(exit_status)
+            exit_code = (
+                exit_status.get("StatusCode", -1)
+                if isinstance(exit_status, dict)
+                else int(exit_status)
+            )
 
-            stdout = container.logs(stdout=True, stderr=False).decode('utf-8', errors='replace')
-            stderr = container.logs(stdout=False, stderr=True).decode('utf-8', errors='replace')
+            stdout = container.logs(stdout=True, stderr=False).decode(
+                "utf-8", errors="replace"
+            )
+            stderr = container.logs(stdout=False, stderr=True).decode(
+                "utf-8", errors="replace"
+            )
 
             return {
-                'success': exit_code == 0,
-                'exit_code': exit_code,
-                'stdout': stdout,
-                'stderr': stderr,
+                "success": exit_code == 0,
+                "exit_code": exit_code,
+                "stdout": stdout,
+                "stderr": stderr,
             }
 
         except ImageNotFound as exc:
@@ -123,10 +136,10 @@ class DockerJobRunner:
             ) from exc
         except ContainerError as exc:
             return {
-                'success': False,
-                'exit_code': exc.exit_status,
-                'stdout': '',
-                'stderr': str(exc),
+                "success": False,
+                "exit_code": exc.exit_status,
+                "stdout": "",
+                "stderr": str(exc),
             }
         finally:
             if container is not None:
@@ -135,5 +148,5 @@ class DockerJobRunner:
                 except Exception:
                     logger.warning(
                         "No se pudo eliminar el contenedor %s",
-                        getattr(container, 'id', '?'),
+                        getattr(container, "id", "?"),
                     )
