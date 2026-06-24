@@ -51,8 +51,8 @@ class QueryHandler:
                 api_key=os.getenv("OPENAI_API_KEY"),
                 model=getattr(settings, 'OPENAI_MODEL', None),
             )
-
         self.language = language  # 'es' or 'en'
+        self.user = user
         # Bases de datos separadas para genes y medicamentos
         self.genes_db_path = os.path.join(os.path.dirname(__file__), '../data/genes/genes_db.xlsx')
         self.drugs_db_path = os.path.join(os.path.dirname(__file__), '../data/drugs/drug_db.xlsx')
@@ -359,78 +359,27 @@ class QueryHandler:
                 "experiment_analysis": predictive_analysis  # NUEVO: Incluir análisis también en modo manual
             }
         else:
-            # Lanzar experimento automático con configuración personalizada
-            result = self.run_autodock_vina(pdb_path, sdf_path, custom_config=vina_config, user_id=user_id)
-            
-            # Obtener información adicional del Excel
-            info = self.get_compound_info(gene, drug)
-            
-            # Actualizar carpeta 3D_viewer después del docking exitoso
-            if result.get('binding_affinity') and not result.get('error'):
-                try:
-                    print(f"[Visualizer] Preparando archivos para 3D viewer...")
-                    from .visualizer_file_manager import prepare_latest_experiment
-                    visualizer_result = prepare_latest_experiment()
-                    
-                    if visualizer_result.get('success'):
-                        print(f"[Visualizer] ✓ Archivos preparados para visualización: {visualizer_result['experiment_key']}")
-                        response_files = visualizer_result.get('files', {})
-                        if response_files:
-                            result['visualization_files_prepared'] = True
-                            result['visualizer_files'] = response_files
-                    else:
-                        print(f"[Visualizer] ⚠ Error preparando visualización: {visualizer_result.get('error', 'Error desconocido')}")
-                        
-                except Exception as visualizer_error:
-                    print(f"[Visualizer] Error actualizando carpeta 3D_viewer: {visualizer_error}")
-                    import traceback
-                    print(f"[Visualizer] Traceback: {traceback.format_exc()}")
-            
-            # Check if docking failed
-            if result.get('error') or result.get('success') == False:
-                response = {
-                    "type": "docking_error",
-                    "error": result.get('error', 'Unknown error occurred during docking'),
-                    "docking_results": result,
-                    "compound_info": info,
-                    "gene": gene,
-                    "drug": drug,
-                    "structure": selected_structure['id']
-                }
+            # Modo automático: crear DockingJob y despachar tarea Celery
+            from core.models import DockingJob
+            from core.tasks import run_docking_job
 
-                # Add configuration info
-                if vina_config:
-                    response["vina_config_used"] = vina_config
+            job = DockingJob.objects.create(
+                user_id=user_id,
+                drug=drug,
+                gene=gene,
+                structure=selected_structure['id'],
+                receptor_path=pdb_path,
+                drug_path=sdf_path,
+                vina_config=vina_config or {},
+                experiment_analysis=predictive_analysis,
+            )
 
-                if 'config_used' in result:
-                    response["vina_config_final"] = result['config_used']
+            run_docking_job.delay(str(job.id))
 
-                return response
-
-            # Incluir información de configuración en la respuesta (success case)
-            # Add actual binding affinity from docking results to experiment_analysis
-            binding_affinity = result.get('binding_affinity')
-            if binding_affinity is not None:
-                predictive_analysis['binding_affinity'] = binding_affinity
-
-            response = {
-                "type": "docking_complete",
-                "docking_results": result,
-                "compound_info": info,
-                "gene": gene,
-                "drug": drug,
-                "structure": selected_structure['id'],
-                "experiment_analysis": predictive_analysis  # NUEVO: Incluir análisis en resultados
+            return {
+                "type": "job_started",
+                "job_id": str(job.id),
             }
-
-            # Añadir información de la configuración utilizada si está disponible
-            if vina_config:
-                response["vina_config_used"] = vina_config
-
-            if 'config_used' in result:
-                response["vina_config_final"] = result['config_used']
-
-            return response
         
         
         
@@ -977,6 +926,87 @@ class QueryHandler:
             print(f"Error creando SDF para {drug_name}: {e}")
             return None
     
+    def build_docking_result_response(self, result: dict, drug: str, gene: str, structure: str, pdb_path: str, vina_config=None, predictive_analysis: dict = None) -> dict:
+        """
+        Construye el dict de respuesta del chat ("docking_error" o "docking_complete")
+        a partir del `result` devuelto por run_autodock_vina.
+
+        Código EXTRAÍDO SIN CAMBIOS de la antigua rama síncrona de
+        handle_docking_flow (manual_mode is False) — ver 07_endpoint_docking_async_y_task.md.
+        """
+        if predictive_analysis is None:
+            predictive_analysis = {}
+
+        # Obtener información adicional del Excel
+        info = self.get_compound_info(gene, drug)
+
+        # Actualizar carpeta 3D_viewer después del docking exitoso
+        if result.get('binding_affinity') and not result.get('error'):
+            try:
+                print(f"[Visualizer] Preparando archivos para 3D viewer...")
+                from .visualizer_file_manager import prepare_latest_experiment
+                visualizer_result = prepare_latest_experiment()
+
+                if visualizer_result.get('success'):
+                    print(f"[Visualizer] ✓ Archivos preparados para visualización: {visualizer_result['experiment_key']}")
+                    response_files = visualizer_result.get('files', {})
+                    if response_files:
+                        result['visualization_files_prepared'] = True
+                        result['visualizer_files'] = response_files
+                else:
+                    print(f"[Visualizer] ⚠ Error preparando visualización: {visualizer_result.get('error', 'Error desconocido')}")
+
+            except Exception as visualizer_error:
+                print(f"[Visualizer] Error actualizando carpeta 3D_viewer: {visualizer_error}")
+                import traceback
+                print(f"[Visualizer] Traceback: {traceback.format_exc()}")
+
+        # Check if docking failed
+        if result.get('error') or result.get('success') == False:
+            response = {
+                "type": "docking_error",
+                "error": result.get('error', 'Unknown error occurred during docking'),
+                "docking_results": result,
+                "compound_info": info,
+                "gene": gene,
+                "drug": drug,
+                "structure": structure
+            }
+
+            # Add configuration info
+            if vina_config:
+                response["vina_config_used"] = vina_config
+
+            if 'config_used' in result:
+                response["vina_config_final"] = result['config_used']
+
+            return response
+
+        # Incluir información de configuración en la respuesta (success case)
+        # Add actual binding affinity from docking results to experiment_analysis
+        binding_affinity = result.get('binding_affinity')
+        if binding_affinity is not None:
+            predictive_analysis['binding_affinity'] = binding_affinity
+
+        response = {
+            "type": "docking_complete",
+            "docking_results": result,
+            "compound_info": info,
+            "gene": gene,
+            "drug": drug,
+            "structure": structure,
+            "experiment_analysis": predictive_analysis  # NUEVO: Incluir análisis en resultados
+        }
+
+        # Añadir información de la configuración utilizada si está disponible
+        if vina_config:
+            response["vina_config_used"] = vina_config
+
+        if 'config_used' in result:
+            response["vina_config_final"] = result['config_used']
+
+        return response
+
     def run_autodock_vina(self, receptor_path, drug_path, custom_config=None, user_id=None):
         """
         Ejecuta AutoDock Vina usando Docker (reemplaza implementación mock)
