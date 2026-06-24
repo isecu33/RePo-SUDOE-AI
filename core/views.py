@@ -6,7 +6,7 @@ import json
 from accounts.decorators import full_access_required
 from .services.query_handler import QueryHandler
 from .services.molecular_utils import MolecularUtils
-from .models import ProteinDatabase, MolecularQuery
+from .models import ProteinDatabase, MolecularQuery, DockingJob
 
 
 @full_access_required
@@ -248,3 +248,35 @@ def query_stats_api(request):
             'success': False,
             'error': str(e)
         }, status=500)
+
+
+@full_access_required
+@require_http_methods(["GET"])
+def docking_job_status(request, job_id):
+    """
+    Devuelve el estado actual de un DockingJob para polling desde el frontend.
+
+    Respuesta JSON:
+      - siempre: {"job_id": ..., "status": ..., "progress": ...}
+      - si status == "completed": ademas {"result": <dict>}
+      - si status == "failed": ademas {"error": <mensaje>, "result": <dict si disponible>}
+    """
+    try:
+        job = DockingJob.objects.get(id=job_id, user=request.user)
+    except DockingJob.DoesNotExist:
+        return JsonResponse({"error": "Job no encontrado"}, status=404)
+
+    data = {
+        "job_id": str(job.id),
+        "status": job.status,
+        "progress": job.progress,
+    }
+
+    if job.status == "completed":
+        data["result"] = job.result_data
+    elif job.status == "failed":
+        data["error"] = job.error_message
+        if job.result_data:
+            data["result"] = job.result_data
+
+    return JsonResponse(data)
