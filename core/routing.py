@@ -8,7 +8,7 @@ from . import consumers
 
 websocket_urlpatterns = [
     re_path(
-        r'^ws/docking-jobs/(?P<job_id>[0-9a-fA-F-]+)/$',
+        r"^ws/docking-jobs/(?P<job_id>[0-9a-fA-F-]+)/$",
         consumers.DockingJobConsumer.as_asgi(),
     ),
 ]

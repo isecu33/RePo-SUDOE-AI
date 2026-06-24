@@ -7,18 +7,29 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('frontend', '0002_update_drug_terminology'),
+        ("frontend", "0002_update_drug_terminology"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='dockingsimulation',
-            name='drug_file',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='drug_simulations', to='frontend.uploadedfile'),
+            model_name="dockingsimulation",
+            name="drug_file",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="drug_simulations",
+                to="frontend.uploadedfile",
+            ),
         ),
         migrations.AlterField(
-            model_name='uploadedfile',
-            name='file_type',
-            field=models.CharField(choices=[('receptor', 'Receptor'), ('drug', 'Drug'), ('pose', 'Correct Pose')], max_length=10),
+            model_name="uploadedfile",
+            name="file_type",
+            field=models.CharField(
+                choices=[
+                    ("receptor", "Receptor"),
+                    ("drug", "Drug"),
+                    ("pose", "Correct Pose"),
+                ],
+                max_length=10,
+            ),
         ),
     ]

@@ -7,7 +7,6 @@ get_ai_provider_for_user() que selecciona el proveedor según la configuración
 guardada en accounts.UserProfile (ver 01_modelo_userprofile_apikey.md).
 """
 
-import os
 import logging
 from abc import ABC, abstractmethod
 
@@ -19,6 +18,7 @@ logger = logging.getLogger(__name__)
 class AIProviderConfigError(Exception):
     """Se lanza cuando la configuración de un proveedor de IA es inválida
     (p.ej. falta API key) o el SDK necesario no está instalado."""
+
     pass
 
 
@@ -26,7 +26,9 @@ class AIProvider(ABC):
     """Interfaz común para todos los proveedores de IA."""
 
     @abstractmethod
-    def generate_response(self, system_prompt: str, user_prompt: str, temperature: float = 0.7) -> str:
+    def generate_response(
+        self, system_prompt: str, user_prompt: str, temperature: float = 0.7
+    ) -> str:
         """
         Genera una respuesta de texto a partir de un prompt de sistema y
         un prompt de usuario. Debe devolver SIEMPRE un str (nunca None).
@@ -41,10 +43,13 @@ class OpenAIProvider(AIProvider):
         if not api_key:
             raise AIProviderConfigError("Falta API key de OpenAI")
         from openai import OpenAI
+
         self.client = OpenAI(api_key=api_key)
         self.model = model or settings.OPENAI_MODEL
 
-    def generate_response(self, system_prompt: str, user_prompt: str, temperature: float = 0.7) -> str:
+    def generate_response(
+        self, system_prompt: str, user_prompt: str, temperature: float = 0.7
+    ) -> str:
         response = self.client.chat.completions.create(
             model=self.model,
             messages=[
@@ -69,7 +74,9 @@ class AnthropicProvider(AIProvider):
         self.client = anthropic.Anthropic(api_key=api_key)
         self.model = model or settings.ANTHROPIC_MODEL
 
-    def generate_response(self, system_prompt: str, user_prompt: str, temperature: float = 0.7) -> str:
+    def generate_response(
+        self, system_prompt: str, user_prompt: str, temperature: float = 0.7
+    ) -> str:
         response = self.client.messages.create(
             model=self.model,
             max_tokens=2048,
@@ -78,7 +85,11 @@ class AnthropicProvider(AIProvider):
             messages=[{"role": "user", "content": user_prompt}],
         )
         # response.content es una lista de bloques; concatenar los de tipo "text"
-        return "".join(block.text for block in response.content if getattr(block, "type", None) == "text")
+        return "".join(
+            block.text
+            for block in response.content
+            if getattr(block, "type", None) == "text"
+        )
 
 
 class GoogleProvider(AIProvider):
@@ -95,7 +106,9 @@ class GoogleProvider(AIProvider):
         self._genai = genai
         self.model_name = model or settings.GOOGLE_MODEL
 
-    def generate_response(self, system_prompt: str, user_prompt: str, temperature: float = 0.7) -> str:
+    def generate_response(
+        self, system_prompt: str, user_prompt: str, temperature: float = 0.7
+    ) -> str:
         model = self._genai.GenerativeModel(
             model_name=self.model_name,
             system_instruction=system_prompt,
@@ -112,11 +125,14 @@ class OllamaProvider(AIProvider):
 
     def __init__(self, base_url: str = None, model: str = None):
         import requests
+
         self._requests = requests
-        self.base_url = (base_url or settings.OLLAMA_BASE_URL).rstrip('/')
+        self.base_url = (base_url or settings.OLLAMA_BASE_URL).rstrip("/")
         self.model = model or settings.OLLAMA_MODEL
 
-    def generate_response(self, system_prompt: str, user_prompt: str, temperature: float = 0.7) -> str:
+    def generate_response(
+        self, system_prompt: str, user_prompt: str, temperature: float = 0.7
+    ) -> str:
         url = f"{self.base_url}/api/chat"
         payload = {
             "model": self.model,
@@ -162,7 +178,7 @@ def get_ai_provider_for_user(user) -> AIProvider:
     Lanza AIProviderConfigError si no hay ninguna API key disponible
     (ni la del usuario ni la global) para el proveedor elegido.
     """
-    profile = getattr(user, 'ai_profile', None) if user is not None else None
+    profile = getattr(user, "ai_profile", None) if user is not None else None
 
     if profile is None:
         return _default_openai_provider()
@@ -171,24 +187,25 @@ def get_ai_provider_for_user(user) -> AIProvider:
     model = profile.ai_model or None
     user_key = profile.encrypted_api_key or None
 
-    if provider_name == 'openai':
+    if provider_name == "openai":
         api_key = user_key or settings.OPENAI_API_KEY
         return OpenAIProvider(api_key=api_key, model=model)
 
-    if provider_name == 'anthropic':
+    if provider_name == "anthropic":
         api_key = user_key or settings.ANTHROPIC_API_KEY
         return AnthropicProvider(api_key=api_key, model=model)
 
-    if provider_name == 'google':
+    if provider_name == "google":
         api_key = user_key or settings.GOOGLE_API_KEY
         return GoogleProvider(api_key=api_key, model=model)
 
-    if provider_name == 'ollama':
+    if provider_name == "ollama":
         base_url = profile.ollama_base_url or settings.OLLAMA_BASE_URL
         return OllamaProvider(base_url=base_url, model=model)
 
     logger.warning(
         "Proveedor de IA desconocido '%s' para usuario %s, usando OpenAI por defecto",
-        provider_name, user
+        provider_name,
+        user,
     )
     return _default_openai_provider()

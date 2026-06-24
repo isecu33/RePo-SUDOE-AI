@@ -12,7 +12,7 @@ Fase 4 del ROADMAP ("WebSockets para progreso en tiempo real").
 
 import os
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
 # get_asgi_application() llama internamente a django.setup(); debe ejecutarse
 # ANTES de importar módulos que usen modelos/apps de Django (core.routing
@@ -27,11 +27,11 @@ from channels.security.websocket import AllowedHostsOriginValidator  # noqa: E40
 
 import core.routing  # noqa: E402
 
-application = ProtocolTypeRouter({
-    "http": django_asgi_app,
-    "websocket": AllowedHostsOriginValidator(
-        AuthMiddlewareStack(
-            URLRouter(core.routing.websocket_urlpatterns)
-        )
-    ),
-})
+application = ProtocolTypeRouter(
+    {
+        "http": django_asgi_app,
+        "websocket": AllowedHostsOriginValidator(
+            AuthMiddlewareStack(URLRouter(core.routing.websocket_urlpatterns))
+        ),
+    }
+)
