@@ -252,3 +252,93 @@ class StructureCache(models.Model):
         self.last_accessed = timezone.now()
         self.access_count += 1
         self.save(update_fields=['last_accessed', 'access_count'])
+
+
+class DockingJob(models.Model):
+    """
+    Representa un experimento de docking ejecutado de forma ASÍNCRONA vía
+    Celery (Fase 2 del ROADMAP). Distinto de frontend.models.DockingSimulation
+    (modelo legado no usado por el flujo actual de QueryHandler).
+
+    Ciclo de vida:
+      pending  -> creado por handle_docking_flow, antes de despachar la tarea Celery
+      running  -> la tarea Celery ha empezado a ejecutarse
+      completed/failed -> la tarea Celery ha terminado
+    """
+
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('running', 'Running'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+    ]
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='docking_jobs'
+    )
+    chat_session = models.ForeignKey(
+        ChatSession,
+        on_delete=models.CASCADE,
+        related_name='docking_jobs',
+        null=True,
+        blank=True
+    )
+
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', db_index=True)
+    progress = models.PositiveSmallIntegerField(default=0, help_text="Progreso estimado, 0-100")
+
+    celery_task_id = models.CharField(max_length=255, blank=True, db_index=True)
+
+    # --- Datos de entrada necesarios para ejecutar el docking ---
+    drug = models.CharField(max_length=255)
+    gene = models.CharField(max_length=255)
+    structure = models.CharField(max_length=20, help_text="Código PDB de la estructura seleccionada")
+    receptor_path = models.CharField(max_length=1024, help_text="Ruta absoluta al archivo PDB del receptor")
+    drug_path = models.CharField(max_length=1024, help_text="Ruta absoluta al archivo SDF del fármaco")
+    vina_config = models.JSONField(default=dict, blank=True, help_text="Configuración personalizada de AutoDock Vina")
+    experiment_analysis = models.JSONField(default=dict, blank=True, help_text="Análisis predictivo generado antes de lanzar el job")
+
+    # --- Resultado ---
+    result_data = models.JSONField(default=dict, blank=True, help_text="Resultado completo (formato igual al de run_autodock_vina / response de docking_complete)")
+    error_message = models.TextField(blank=True)
+
+    # --- Timestamps ---
+    created_at = models.DateTimeField(default=timezone.now)
+    started_at = models.DateTimeField(null=True, blank=True)
+    finished_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Docking Job"
+        verbose_name_plural = "Docking Jobs"
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['status']),
+            models.Index(fields=['user', 'status']),
+        ]
+
+    def __str__(self):
+        return f"DockingJob {self.id} ({self.drug} vs {self.gene}) - {self.status}"
+
+    def mark_running(self):
+        self.status = 'running'
+        self.started_at = timezone.now()
+        self.save(update_fields=['status', 'started_at'])
+
+    def mark_completed(self, result_data: dict):
+        self.status = 'completed'
+        self.progress = 100
+        self.result_data = result_data
+        self.finished_at = timezone.now()
+        self.save(update_fields=['status', 'progress', 'result_data', 'finished_at'])
+
+    def mark_failed(self, error_message: str, result_data: dict = None):
+        self.status = 'failed'
+        self.error_message = error_message
+        if result_data is not None:
+            self.result_data = result_data
+        self.finished_at = timezone.now()
+        self.save(update_fields=['status', 'error_message', 'result_data', 'finished_at'])
