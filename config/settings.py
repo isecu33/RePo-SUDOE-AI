@@ -234,6 +234,7 @@ VINA_MAX_PARALLEL_JOBS = int(os.getenv('VINA_MAX_PARALLEL_JOBS', '2'))
 VINA_CPU_QUOTA = int(os.getenv('VINA_CPU_QUOTA', '100000'))
 VINA_MEM_LIMIT = os.getenv('VINA_MEM_LIMIT', '512m')
 VINA_TIMEOUT_SECONDS = int(os.getenv('VINA_TIMEOUT_SECONDS', '1200'))
+VINA_JOBS_DIR = os.getenv('VINA_JOBS_DIR', '/tmp/vina_jobs')
 # Celery (Fase 2 - ROADMAP: procesamiento asíncrono de jobs de docking)
 # =============================================================================
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
