@@ -15,13 +15,14 @@ from django.utils import timezone
 import json
 import uuid
 
-from .models import CustomUser, AccessRequest, EmailVerification, PasswordReset
+from .models import CustomUser, AccessRequest, EmailVerification, PasswordReset, UserProfile
 from .forms import (
     CustomUserCreationForm, 
     AccessRequestForm, 
     CustomAuthenticationForm,
     PasswordResetRequestForm,
-    PasswordResetForm
+    PasswordResetForm,
+    ProfileAISettingsForm
 )
 from .utils import get_client_ip
 
@@ -195,6 +196,35 @@ def profile(request):
     return render(request, 'accounts/profile.html', {
         'user': user,
         'access_request': access_request
+    })
+
+
+@login_required
+def profile_settings(request):
+    """Página de configuración del proveedor de IA del usuario."""
+    profile_obj, _created = UserProfile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        form = ProfileAISettingsForm(request.POST, instance=profile_obj)
+        if form.is_valid():
+            updated_profile = form.save(commit=False)
+
+            if form.cleaned_data.get('clear_api_key'):
+                updated_profile.encrypted_api_key = ''
+            elif form.cleaned_data.get('api_key'):
+                updated_profile.encrypted_api_key = form.cleaned_data['api_key']
+            # si api_key está vacío y clear_api_key es False, no se toca encrypted_api_key
+
+            updated_profile.save()
+            messages.success(request, "Configuración de IA actualizada correctamente.")
+            return redirect('accounts:profile_settings')
+    else:
+        form = ProfileAISettingsForm(instance=profile_obj)
+
+    return render(request, 'accounts/settings.html', {
+        'form': form,
+        'profile': profile_obj,
+        'has_api_key': profile_obj.has_custom_api_key(),
     })
 
 @staff_member_required

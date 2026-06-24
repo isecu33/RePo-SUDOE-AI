@@ -19,6 +19,7 @@ urlpatterns = [
 
     # User profile
     path('profile/', views.profile, name='profile'),
+    path('settings/', views.profile_settings, name='profile_settings'),
 
     # Admin dashboard (for staff)
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),

@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
-from .models import CustomUser, AccessRequest
+from .models import CustomUser, AccessRequest, UserProfile, AI_PROVIDER_CHOICES
 
 class CustomUserCreationForm(UserCreationForm):
     """Extended user creation form"""
@@ -266,6 +266,47 @@ class ProfileUpdateForm(forms.ModelForm):
             'research_area': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'orcid_id': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+
+class ProfileAISettingsForm(forms.ModelForm):
+    """Formulario para configurar el proveedor de IA y la API key del usuario."""
+
+    api_key = forms.CharField(
+        label="API Key",
+        required=False,
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-control', 'autocomplete': 'off', 'placeholder': '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'},
+            render_value=False,
+        ),
+        help_text="D\u00e9jalo en blanco para no cambiar la clave guardada. "
+                   "No es necesario para Ollama."
+    )
+    clear_api_key = forms.BooleanField(
+        label="Eliminar API key guardada",
+        required=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
+    )
+
+    class Meta:
+        model = UserProfile
+        fields = ['ai_provider', 'ai_model', 'ollama_base_url']
+        widgets = {
+            'ai_provider': forms.Select(attrs={'class': 'form-select', 'id': 'id_ai_provider'}),
+            'ai_model': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ej: gpt-4o-mini, claude-3-haiku-20240307, gemini-1.5-flash, llama3.1:8b'
+            }),
+            'ollama_base_url': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'http://localhost:11434'
+            }),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get('clear_api_key') and cleaned_data.get('api_key'):
+            raise ValidationError("No marques 'Eliminar API key' y a la vez introduzcas una nueva clave.")
+        return cleaned_data
 
 class AdminReviewForm(forms.Form):
     """Form for admin to review access requests"""
