@@ -51,6 +51,8 @@ services:
       - .:/app
       - static_volume:/app/staticfiles
       - media_volume:/app/media
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${VINA_JOBS_DIR:-/tmp/vina_jobs}:${VINA_JOBS_DIR:-/tmp/vina_jobs}
     ports:
       - "${WEB_PORT:-8000}:8000"
     env_file:
@@ -73,6 +75,8 @@ services:
     volumes:
       - .:/app
       - media_volume:/app/media
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${VINA_JOBS_DIR:-/tmp/vina_jobs}:${VINA_JOBS_DIR:-/tmp/vina_jobs}
     env_file:
       - .env
     depends_on:
