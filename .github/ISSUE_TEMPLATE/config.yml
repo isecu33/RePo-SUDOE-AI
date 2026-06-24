@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Preguntas y discusión general
+    url: https://github.com/isecu33/RePo-SUDOE-AI/discussions
+    about: Para preguntas generales o ideas que aún no son una propuesta concreta, usa Discussions en lugar de un Issue.
+  - name: Guía de contribución
+    url: https://github.com/isecu33/RePo-SUDOE-AI/blob/main/CONTRIBUTING.md
+    about: Lee CONTRIBUTING.md antes de abrir un Issue o Pull Request.
