@@ -84,6 +84,27 @@ services:
       - repo-sudoe-network
     restart: unless-stopped
 
+
+  # Ollama - IA local (Fase 5, opcional)
+  ollama:
+    image: ollama/ollama:latest
+    container_name: repo-sudoe-ollama
+    ports:
+      - "${OLLAMA_PORT:-11434}:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    networks:
+      - repo-sudoe-network
+    restart: unless-stopped
+    # Para usar GPU NVIDIA (requiere nvidia-container-toolkit instalado en el host):
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
   # Nginx (Optional - for production with reverse proxy)
   nginx:
     image: nginx:alpine
@@ -107,6 +128,7 @@ volumes:
   postgres_data:
   static_volume:
   media_volume:
+  ollama_models:
 
 networks:
   repo-sudoe-network:
