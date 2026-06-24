@@ -10,6 +10,7 @@ import type {
   Language,
 } from './types';
 import { pollDockingJobUntilDone } from './services/jobPolling';
+import { subscribeToDockingJob } from './services/jobSocket';
 
 // Interfaz para el contexto de docking actual
 interface DockingContext {
@@ -636,42 +637,51 @@ export class ChatManager {
       return;
     }
 
+    const jobId = result.job_id;
+
     this.addMessageToChat(
-      `${icon('info')} ${t('dockingJobStarted')}`,
+      `${icon('clock')} ${t('dockingJobStarted')}`,
       'assistant',
     );
 
+    let finalStatus;
     try {
-      const finalStatus = await pollDockingJobUntilDone(result.job_id);
-
-      if (finalStatus.status === 'completed' && finalStatus.result) {
-        this.handleChatResponse(finalStatus.result as FullDockingResponse, originalMessage);
+      // Intento 1: notificaciones en tiempo real vía WebSocket.
+      finalStatus = await subscribeToDockingJob(jobId);
+    } catch (wsError) {
+      console.warn('WebSocket de progreso no disponible, usando polling:', wsError);
+      try {
+        // Intento 2 (respaldo): polling HTTP (tarea 09), igual que antes.
+        finalStatus = await pollDockingJobUntilDone(jobId);
+      } catch (pollError) {
+        console.error('Error haciendo polling del DockingJob:', pollError);
+        this.addMessageToChat(
+          `${icon('error')} ${t('connectionError')}${t('defaultError')}`,
+          'assistant',
+          true,
+        );
         return;
       }
-
-      if (finalStatus.status === 'failed') {
-        if (finalStatus.result) {
-          this.handleChatResponse(finalStatus.result as FullDockingResponse, originalMessage);
-        } else {
-          this.handleDockingError({
-            type: 'docking_error',
-            error: finalStatus.error ?? t('genericError'),
-          } as FullDockingResponse);
-        }
-        return;
-      }
-
-      // No debería ocurrir (pollDockingJobUntilDone solo devuelve al terminar
-      // o lanza excepción por timeout), pero se cubre por completitud.
-      this.addMessageToChat(`${icon('error')} ${t('genericError')}`, 'assistant', true);
-    } catch (error: unknown) {
-      console.error('Error haciendo polling del DockingJob:', error);
-      this.addMessageToChat(
-        `${icon('error')} ${t('connectionError')}${t('defaultError')}`,
-        'assistant',
-        true,
-      );
     }
+
+    if (finalStatus.status === 'completed' && finalStatus.result) {
+      this.handleChatResponse(finalStatus.result as FullDockingResponse, originalMessage);
+      return;
+    }
+
+    if (finalStatus.status === 'failed') {
+      if (finalStatus.result) {
+        this.handleChatResponse(finalStatus.result as FullDockingResponse, originalMessage);
+      } else {
+        this.handleDockingError({
+          type: 'docking_error',
+          error: finalStatus.error ?? t('genericError'),
+        } as FullDockingResponse);
+      }
+      return;
+    }
+
+    this.addMessageToChat(`${icon('error')} ${t('genericError')}`, 'assistant', true);
   }
 
   // ---- Helpers ----
